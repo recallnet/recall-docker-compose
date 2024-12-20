@@ -1,0 +1,33 @@
+name: $network_name
+
+services:
+  ipc-home-setup:
+    build:
+      dockerfile: ./init/Dockerfile
+    volumes:
+      - $ipc_home:/ipc
+      - ./:/scripts:ro
+    command: nu /scripts/init-ipc-config.nu
+
+  genesis:
+    image: $fendermint_image
+    volumes:
+      - ${genesis_folder}:/genesis
+      - $ipc_home:/ipc
+      - ./:/scripts:ro
+    entrypoint: /bin/bash /scripts/download-genesis.sh
+    env_file: network-config.env
+
+    # depends_on:
+    #   ipc-home-setup:
+    #     condition: service_completed_successfully
+
+  cometbft:
+    image: $cometbft_image
+    restart: always
+    volumes:
+      - $cometbft_folder:/cometbft
+    depends_on:
+      genesis:
+        condition: service_completed_successfully
+
