@@ -1,13 +1,13 @@
 name: $network_name
 
 services:
-  ipc-home-setup:
-    build:
-      dockerfile: ./init/Dockerfile
-    volumes:
-      - $ipc_home:/ipc
-      - ./:/repo:ro
-    command: nu /repo/scripts/init-ipc-config.nu
+  # ipc-home-setup:
+  #   build:
+  #     dockerfile: ./init/Dockerfile
+  #   volumes:
+  #     - $ipc_home:/ipc
+  #     - ./:/repo:ro
+  #   command: nu /repo/scripts/init-ipc-config.nu
 
   cometbft-init:
     image: $cometbft_image
@@ -38,3 +38,15 @@ services:
       cometbft-init:
         condition: service_completed_successfully
 
+  write-config:
+    build: ./init
+    volumes:
+      - ./:/repo:ro
+      - $workdir:/workdir
+    command: sh /repo/scripts/write-configs.sh
+    depends_on:
+      cometbft-init:
+        condition: service_completed_successfully
+    env_file:
+      - path: ./.env
+      - path: ./network-config.env

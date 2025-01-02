@@ -5,9 +5,7 @@ fendermint_dir=/workdir/fendermint
 fendermint_keys_dir=$fendermint_dir/keys
 
 # === Fendermint
-mkdir -p $fendermint_dir/config
 mkdir -p $fendermint_keys_dir
-
 
 eth_pk=/tmp/key
 echo $validator_private_key > $eth_pk
