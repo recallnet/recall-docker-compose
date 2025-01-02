@@ -18,7 +18,6 @@ services:
   genesis:
     image: $fendermint_image
     volumes:
-      - $genesis_folder:/genesis
       - $cometbft_folder:/cometbft
       - ./:/repo:ro
     entrypoint: /bin/bash /repo/scripts/download-genesis.sh
@@ -26,7 +25,6 @@ services:
     depends_on:
       cometbft-config:
         condition: service_completed_successfully
-
 
   keys:
     image: $fendermint_image
