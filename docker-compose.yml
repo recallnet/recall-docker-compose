@@ -6,28 +6,37 @@ services:
       dockerfile: ./init/Dockerfile
     volumes:
       - $ipc_home:/ipc
-      - ./:/scripts:ro
-    command: nu /scripts/init-ipc-config.nu
+      - ./:/repo:ro
+    command: nu /repo/scripts/init-ipc-config.nu
+
+  cometbft-config:
+    image: $cometbft_image
+    volumes:
+      - $cometbft_folder:/cometbft
+    command: init --home /cometbft
 
   genesis:
     image: $fendermint_image
     volumes:
-      - ${genesis_folder}:/genesis
-      - $ipc_home:/ipc
-      - ./:/scripts:ro
-    entrypoint: /bin/bash /scripts/download-genesis.sh
+      - $genesis_folder:/genesis
+      - $cometbft_folder:/cometbft
+      - ./:/repo:ro
+    entrypoint: /bin/bash /repo/scripts/download-genesis.sh
+    env_file: network-config.env
+    depends_on:
+      cometbft-config:
+        condition: service_completed_successfully
+
+
+  keys:
+    image: $fendermint_image
+    volumes:
+      - ./:/repo:ro
+      - $workdir:/workdir
+    entrypoint: /bin/bash /repo/scripts/set-up-keys.sh
     env_file: network-config.env
 
-    # depends_on:
-    #   ipc-home-setup:
-    #     condition: service_completed_successfully
-
-  cometbft:
-    image: $cometbft_image
-    restart: always
-    volumes:
-      - $cometbft_folder:/cometbft
     depends_on:
-      genesis:
+      cometbft-config:
         condition: service_completed_successfully
 

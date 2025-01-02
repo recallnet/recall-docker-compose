@@ -2,7 +2,8 @@
 
 set -eux
 
-dest="/genesis/genesis.json"
+genesis_dir="/cometbft/genesis"
+dest="$genesis_dir/genesis.json"
 
 if [ -e $dest ]; then
   echo "$dest already exists"
@@ -12,8 +13,11 @@ fi
 echo "Downloading genesis"
 
 export FM_NETWORK=$address_network
-raw=/genesis/genesis.raw.json
-sealed=/genesis/genesis.sealed.json
+raw=$genesis_dir/genesis.raw.json
+sealed=$genesis_dir/genesis.sealed.json
+
+mkdir -p $genesis_dir
+
 fendermint genesis --genesis-file $raw \
   ipc from-parent \
   --subnet-id $subnet_id \
@@ -36,3 +40,5 @@ fendermint genesis --genesis-file $raw \
   --app-state $sealed \
   --out $dest
 
+cd /cometbft/config
+ln -sf ../genesis/genesis.json
