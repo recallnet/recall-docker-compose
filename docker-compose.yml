@@ -9,7 +9,7 @@ services:
       - ./:/repo:ro
     command: nu /repo/scripts/init-ipc-config.nu
 
-  cometbft-config:
+  cometbft-init:
     image: $cometbft_image
     volumes:
       - $cometbft_folder:/cometbft
@@ -23,7 +23,7 @@ services:
     entrypoint: /bin/bash /repo/scripts/download-genesis.sh
     env_file: network-config.env
     depends_on:
-      cometbft-config:
+      cometbft-init:
         condition: service_completed_successfully
 
   keys:
@@ -35,6 +35,6 @@ services:
     env_file: network-config.env
 
     depends_on:
-      cometbft-config:
+      cometbft-init:
         condition: service_completed_successfully
 
