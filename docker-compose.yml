@@ -21,7 +21,9 @@ services:
       - $cometbft_folder:/cometbft
       - ./:/repo:ro
     entrypoint: /bin/bash /repo/scripts/download-genesis.sh
-    env_file: network-config.env
+    env_file:
+      - path: network-config.env
+      - path: secrets.env
     depends_on:
       cometbft-init:
         condition: service_completed_successfully
@@ -32,7 +34,9 @@ services:
       - ./:/repo:ro
       - $workdir:/workdir
     entrypoint: /bin/bash /repo/scripts/set-up-keys.sh
-    env_file: network-config.env
+    env_file:
+      - path: network-config.env
+      - path: secrets.env
 
     depends_on:
       cometbft-init:
