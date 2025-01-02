@@ -1,14 +1,6 @@
 name: $network_name
 
 services:
-  # ipc-home-setup:
-  #   build:
-  #     dockerfile: ./init/Dockerfile
-  #   volumes:
-  #     - $ipc_home:/ipc
-  #     - ./:/repo:ro
-  #   command: nu /repo/scripts/init-ipc-config.nu
-
   cometbft-init:
     image: $cometbft_image
     volumes:

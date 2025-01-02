@@ -1,4 +1,4 @@
-let cfg = (open /scripts/network-config.toml)
+let cfg = (open /repo/network-config.toml)
 
 const dest = "/ipc/config.toml"
 if ($dest | path exists) {
