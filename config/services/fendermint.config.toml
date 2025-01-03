@@ -162,7 +162,7 @@ enabled = true
 
 [eth.metrics.listen]
 # Only accept connections from a Prometheus scraper, assumed to be running locally.
-host = "127.0.0.1"
+host = "0.0.0.0"
 # The default port where the Prometheus exporter makes the metrics available.
 port = 9185
 
@@ -182,6 +182,7 @@ allowed_headers = []
 
 [eth.tracing.console]
 enabled = true
+level = "info"
 
 [eth.tracing.file]
 enabled = false
@@ -199,6 +200,7 @@ port = 8001
 
 [objects.tracing.console]
 enabled = true
+level = "info"
 
 [objects.tracing.file]
 enabled = false
@@ -209,7 +211,7 @@ enabled = true
 
 [objects.metrics.listen]
 # Only accept connections from a Prometheus scraper, assumed to be running locally.
-host = "127.0.0.1"
+host = "0.0.0.0"
 # The default port where the Prometheus exporter makes the metrics available.
 port = 9186
 

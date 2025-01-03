@@ -16,4 +16,15 @@ services:
       - $fendermint_folder:/data
     env_file:
       - path: ./config/network-config.env
-      - path: ./config/fendermint.env
+      - path: ./config/services/fendermint.env
+
+  ethapi:
+    image: $fendermint_image
+    command: eth run
+    restart: always
+    volumes:
+      - $fendermint_folder:/data
+    env_file:
+      - path: ./config/network-config.env
+      - path: ./config/services/fendermint.env
+      - path: ./config/services/ethapi.env

@@ -10,9 +10,9 @@ else
   export trusted_block_height=0
 fi
 
-envsubst < /repo/config/cometbft.config.toml > /workdir/cometbft/config/config.toml 
+envsubst < /repo/config/services/cometbft.config.toml > /workdir/cometbft/config/config.toml 
 
 
 # Fendermint
 mkdir -p /workdir/fendermint/config
-envsubst < /repo/config/fendermint.config.toml > /workdir/fendermint/config/default.toml 
+envsubst < /repo/config/services/fendermint.config.toml > /workdir/fendermint/config/default.toml 
