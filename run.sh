@@ -2,7 +2,8 @@
 
 set -e
 
-file=docker-compose.run.yml
+cmd=${@:-up}
+opts="-f ./docker-compose.run.yml --env-file ./config/node.env"
 
-docker compose -f $file --env-file ./config/node.env up $@
+docker compose $opts $cmd
 

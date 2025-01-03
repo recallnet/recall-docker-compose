@@ -27,6 +27,11 @@ fendermint genesis --genesis-file $raw \
   --parent-registry $parent_registry_address
 
 fendermint genesis --genesis-file $raw set-eam-permissions --mode unrestricted
+set +u
+if [ ! -z "$chain_id" ]; then
+  fendermint genesis --genesis-file $raw set-chain-id --chain-id $chain_id
+fi
+set -u
 
 fendermint genesis --genesis-file $raw \
   ipc seal-genesis \
