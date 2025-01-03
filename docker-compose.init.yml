@@ -4,7 +4,7 @@ services:
   cometbft-init:
     image: $cometbft_image
     volumes:
-      - $cometbft_folder:/cometbft
+      - $cometbft_dir:/cometbft
     command: init --home /cometbft
 
   genesis:

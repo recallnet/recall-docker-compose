@@ -6,14 +6,14 @@ services:
     command: run --home /cometbft
     restart: always
     volumes:
-      - $cometbft_folder:/cometbft
+      - $cometbft_dir:/cometbft
 
   fendermint:
     image: $fendermint_image
     command: run
     restart: always
     volumes:
-      - $fendermint_folder:/data
+      - $fendermint_dir:/data
     env_file:
       - path: ./config/network-config.env
       - path: ./config/services/fendermint.env
@@ -23,8 +23,40 @@ services:
     command: eth run
     restart: always
     volumes:
-      - $fendermint_folder:/data
+      - $fendermint_dir:/data
     env_file:
       - path: ./config/network-config.env
       - path: ./config/services/fendermint.env
       - path: ./config/services/ethapi.env
+    depends_on:
+      - fendermint
+
+  iroh:
+    image: $iroh_image
+    command: |
+      --rpc-addr 0.0.0.0:4919
+      --metrics-addr 0.0.0.0:4920
+      --config /etc/iroh/config.toml
+      start
+    restart: always
+    volumes:
+      - $datadir:/data
+      - ./config/services/iroh.config.toml:/etc/iroh/config.toml
+    environment:
+      IROH_DATA_DIR: /data
+      IROH_CONFIG_DIR: /etc/iroh
+
+  objects:
+    image: $fendermint_image
+    command: objects run
+    restart: always
+    volumes:
+      - $fendermint_dir:/data
+    env_file:
+      - path: ./config/network-config.env
+      - path: ./config/services/fendermint.env
+      - path: ./config/services/objects.env
+    depends_on:
+      - fendermint
+      - cometbft
+      - iroh
