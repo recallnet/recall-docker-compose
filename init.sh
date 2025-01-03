@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-set -ex
+set -e
 
-source <(cat config/node.env | xargs -L 1 | sed -e 's/^/export &/')
-docker compose up --abort-on-container-failure
+opts="-f ./docker-compose.init.yml --env-file ./config/node.env"
+trap "docker compose $opts down" EXIT
+
+docker compose $opts up --abort-on-container-failure
 

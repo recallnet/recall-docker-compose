@@ -15,3 +15,4 @@ envsubst < /repo/config/cometbft.config.toml > /workdir/cometbft/config/config.t
 
 # Fendermint
 mkdir -p /workdir/fendermint/config
+envsubst < /repo/config/fendermint.config.toml > /workdir/fendermint/config/default.toml 

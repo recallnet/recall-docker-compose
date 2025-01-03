@@ -1,0 +1,19 @@
+name: $network_name
+
+services:
+  cometbft:
+    image: $cometbft_image
+    command: run --home /cometbft
+    restart: always
+    volumes:
+      - $cometbft_folder:/cometbft
+
+  fendermint:
+    image: $fendermint_image
+    command: run
+    restart: always
+    volumes:
+      - $fendermint_folder:/data
+    env_file:
+      - path: ./config/network-config.env
+      - path: ./config/fendermint.env

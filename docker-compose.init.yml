@@ -1,4 +1,4 @@
-name: $network_name
+name: ${network_name}-init
 
 services:
   cometbft-init:
@@ -12,7 +12,7 @@ services:
     volumes:
       - $cometbft_folder:/cometbft
       - ./:/repo:ro
-    entrypoint: /bin/bash /repo/scripts/download-genesis.sh
+    entrypoint: /bin/bash /repo/init/download-genesis.sh
     env_file:
       - path: ./config/network-config.env
       - path: ./config/secrets.env
@@ -25,7 +25,7 @@ services:
     volumes:
       - ./:/repo:ro
       - $workdir:/workdir
-    entrypoint: /bin/bash /repo/scripts/set-up-keys.sh
+    entrypoint: /bin/bash /repo/init/set-up-keys.sh
     env_file:
       - path: ./config/network-config.env
       - path: ./config/secrets.env
@@ -39,10 +39,12 @@ services:
     volumes:
       - ./:/repo:ro
       - $workdir:/workdir
-    command: sh /repo/scripts/write-configs.sh
+    command: sh /repo/init/write-configs.sh
     depends_on:
       cometbft-init:
         condition: service_completed_successfully
     env_file:
       - path: ./config/node.env
       - path: ./config/network-config.env
+      - path: ./config/secrets.env
+
