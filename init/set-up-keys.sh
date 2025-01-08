@@ -1,6 +1,5 @@
 set -eu
 
-# FIX take values from node.env
 cometbft_dir=/workdir/cometbft
 fendermint_dir=/workdir/fendermint
 relayer_dir=/workdir/relayer

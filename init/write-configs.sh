@@ -10,23 +10,23 @@ else
   export trusted_block_height=0
 fi
 
-envsubst < /repo/config/services/cometbft.config.toml > $cometbft_dir/config/config.toml 
+envsubst < /repo/config/services/cometbft.config.toml > /workdir/cometbft/config/config.toml
 
 
 # Fendermint
 mkdir -p /workdir/fendermint/config
-envsubst < /repo/config/services/fendermint.config.toml > $fendermint_dir/config/default.toml 
+envsubst < /repo/config/services/fendermint.config.toml > /workdir/fendermint/config/default.toml
 
 # Hoku exporter
-validator_address=$(cat /workdir/generated/ipc/evm_keystore.json | jq -r '.[].address') 
+validator_address=$(cat /workdir/generated/ipc/evm_keystore.json | jq -r '.[].address')
 echo "validator_address=$validator_address" > /workdir/generated/hoku-exporter.env
 
 # Relayer
 if [ $relayer_replicas == 1 ]; then
   mkdir -p /workdir/relayer/ipc
-  export relayer_address=$(jq -r '.[].address' < $relayer_dir/ipc/evm_keystore.json)
-  envsubst < /repo/config/services/run-relayer.sh > $relayer_dir/run.sh
-  envsubst < /repo/config/services/relayer.ipc.config.toml > $relayer_dir/ipc/config.toml
+  export relayer_address=$(jq -r '.[].address' < /workdir/relayer/ipc/evm_keystore.json)
+  envsubst < /repo/config/services/run-relayer.sh > /workdir/relayer/run.sh
+  envsubst < /repo/config/services/relayer.ipc.config.toml > /workdir/relayer/ipc/config.toml
 fi
 
 # Prometheus

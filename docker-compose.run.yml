@@ -6,14 +6,14 @@ services:
     command: run --home /cometbft
     restart: always
     volumes:
-      - $cometbft_dir:/cometbft
+      - $workdir/cometbft:/cometbft
 
   fendermint:
     image: $fendermint_image
     command: run
     restart: always
     volumes:
-      - $fendermint_dir:/data
+      - $workdir/fendermint:/data
     env_file:
       - ./config/network-${network_name}.env
       - ./config/services/fendermint.env
@@ -23,7 +23,7 @@ services:
     command: eth run
     restart: always
     volumes:
-      - $fendermint_dir:/data
+      - $workdir/fendermint:/data
     env_file:
       - ./config/network-${network_name}.env
       - ./config/services/fendermint.env
@@ -51,7 +51,7 @@ services:
     command: objects run
     restart: always
     volumes:
-      - $fendermint_dir:/data
+      - $workdir/fendermint:/data
     env_file:
       - ./config/network-${network_name}.env
       - ./config/services/fendermint.env
@@ -65,7 +65,7 @@ services:
     image: $hoku_exporter_image
     restart: always
     env_file:
-      - $generated_dir/hoku-exporter.env
+      - $workdir/generated/hoku-exporter.env
       - ./config/network-${network_name}.env
       - ./config/services/hoku-exporter.env
     depends_on:
@@ -78,7 +78,7 @@ services:
     deploy:
       replicas: $relayer_replicas
     volumes:
-      - $relayer_dir:/relayer
+      - $workdir/relayerr:/relayer
     env_file:
       - ./config/network-${network_name}.env
     depends_on:
@@ -88,7 +88,7 @@ services:
     image: $prometheus_image
     restart: always
     volumes:
-      - $prometheus_dir:/etc/prometheus
+      - $workdir/prometheus:/etc/prometheus
     command: >
       --config.file=/etc/prometheus/config.yml
       --storage.tsdb.retention.time=10m
@@ -98,5 +98,7 @@ services:
     restart: always
     env_file:
       - ./config/services/faucet.env
+    deploy:
+      replicas: $faucet_replicas
     depends_on:
       - ethapi

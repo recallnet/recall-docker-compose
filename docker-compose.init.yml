@@ -4,18 +4,18 @@ services:
   cometbft-init:
     image: $cometbft_image
     volumes:
-      - $cometbft_dir:/cometbft
+      - $workdir/cometbft:/cometbft
     command: init --home /cometbft
 
   genesis:
     image: $fendermint_image
     volumes:
-      - $cometbft_dir:/cometbft
+      - $workdir/cometbft:/cometbft
       - ./:/repo:ro
     entrypoint: /bin/bash /repo/init/download-genesis.sh
     env_file:
       - path: ./config/network-${network_name}.env
-      - path: ./config/node.env
+      - path: ./config/node.env # secrets only
     depends_on:
       cometbft-init:
         condition: service_completed_successfully
