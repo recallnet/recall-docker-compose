@@ -66,7 +66,6 @@ services:
     restart: always
     env_file:
       - $generated_dir/hoku-exporter.env
-      - ./config/secrets.env
       - ./config/network-config.env
       - ./config/services/hoku-exporter.env
     depends_on:
@@ -93,3 +92,11 @@ services:
     command: >
       --config.file=/etc/prometheus/config.yml
       --storage.tsdb.retention.time=10m
+
+  faucet:
+    image: $faucet_image
+    restart: always
+    env_file:
+      - ./config/services/faucet.env
+    depends_on:
+      - ethapi

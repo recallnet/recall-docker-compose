@@ -15,7 +15,7 @@ services:
     entrypoint: /bin/bash /repo/init/download-genesis.sh
     env_file:
       - path: ./config/network-config.env
-      - path: ./config/secrets.env
+      - path: ./config/node.env
     depends_on:
       cometbft-init:
         condition: service_completed_successfully
@@ -30,7 +30,6 @@ services:
       - path: ./config/node-default.env
       - path: ./config/node.env
       - path: ./config/network-config.env
-      - path: ./config/secrets.env
 
     depends_on:
       cometbft-init:
