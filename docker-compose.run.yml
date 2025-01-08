@@ -15,7 +15,7 @@ services:
     volumes:
       - $fendermint_dir:/data
     env_file:
-      - ./config/network-config.env
+      - ./config/network-${network_name}.env
       - ./config/services/fendermint.env
 
   ethapi:
@@ -25,7 +25,7 @@ services:
     volumes:
       - $fendermint_dir:/data
     env_file:
-      - ./config/network-config.env
+      - ./config/network-${network_name}.env
       - ./config/services/fendermint.env
       - ./config/services/ethapi.env
     depends_on:
@@ -53,7 +53,7 @@ services:
     volumes:
       - $fendermint_dir:/data
     env_file:
-      - ./config/network-config.env
+      - ./config/network-${network_name}.env
       - ./config/services/fendermint.env
       - ./config/services/objects.env
     depends_on:
@@ -66,7 +66,7 @@ services:
     restart: always
     env_file:
       - $generated_dir/hoku-exporter.env
-      - ./config/network-config.env
+      - ./config/network-${network_name}.env
       - ./config/services/hoku-exporter.env
     depends_on:
       - ethapi
@@ -80,7 +80,7 @@ services:
     volumes:
       - $relayer_dir:/relayer
     env_file:
-      - ./config/network-config.env
+      - ./config/network-${network_name}.env
     depends_on:
       - fendermint
 
