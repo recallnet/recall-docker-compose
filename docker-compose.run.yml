@@ -84,3 +84,12 @@ services:
       - ./config/network-config.env
     depends_on:
       - fendermint
+
+  prometheus:
+    image: $prometheus_image
+    restart: always
+    volumes:
+      - $prometheus_dir:/etc/prometheus
+    command: >
+      --config.file=/etc/prometheus/config.yml
+      --storage.tsdb.retention.time=10m

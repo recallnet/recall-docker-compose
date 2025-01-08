@@ -28,3 +28,9 @@ if [ $relayer_replicas == 1 ]; then
   envsubst < /repo/config/services/run-relayer.sh > $relayer_dir/run.sh
   envsubst < /repo/config/services/relayer.ipc.config.toml > $relayer_dir/ipc/config.toml
 fi
+
+# Prometheus
+mkdir -p /workdir/prometheus/targets
+mkdir -p /workdir/prometheus/alertmanager
+envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/config.yml
+
