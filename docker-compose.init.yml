@@ -1,4 +1,4 @@
-name: ${network_name}-init
+name: ${project_name}-init
 
 services:
   cometbft-init:
@@ -10,7 +10,7 @@ services:
   genesis:
     image: $fendermint_image
     volumes:
-      - $cometbft_folder:/cometbft
+      - $cometbft_dir:/cometbft
       - ./:/repo:ro
     entrypoint: /bin/bash /repo/init/download-genesis.sh
     env_file:
@@ -27,6 +27,7 @@ services:
       - $workdir:/workdir
     entrypoint: /bin/bash /repo/init/set-up-keys.sh
     env_file:
+      - path: ./config/node.env
       - path: ./config/network-config.env
       - path: ./config/secrets.env
 

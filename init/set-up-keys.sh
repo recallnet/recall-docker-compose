@@ -1,7 +1,9 @@
 set -eux
 
+# FIX take values from node.env
 cometbft_dir=/workdir/cometbft
 fendermint_dir=/workdir/fendermint
+relayer_dir=/workdir/relayer
 fendermint_keys_dir=$fendermint_dir/keys
 
 # === Fendermint
@@ -21,3 +23,11 @@ fendermint key gen --name network --out-dir $fendermint_dir/keys
 # === CometBFT
 fendermint key into-tendermint -s $fendermint_keys_dir/validator.sk -o $cometbft_dir/config/priv_validator_key.json
 
+
+# === Relayer
+if [ $relayer_replicas == 1 ]; then
+  mkdir -p $relayer_dir/ipc
+  cfg=$relayer_dir/ipc/config.toml
+  echo "keystore_path = '$relayer_dir/ipc'" > $cfg
+  ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $relayer_private_key
+fi

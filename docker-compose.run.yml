@@ -1,4 +1,4 @@
-name: $network_name
+name: $project_name
 
 services:
   cometbft:
@@ -15,8 +15,8 @@ services:
     volumes:
       - $fendermint_dir:/data
     env_file:
-      - path: ./config/network-config.env
-      - path: ./config/services/fendermint.env
+      - ./config/network-config.env
+      - ./config/services/fendermint.env
 
   ethapi:
     image: $fendermint_image
@@ -25,9 +25,9 @@ services:
     volumes:
       - $fendermint_dir:/data
     env_file:
-      - path: ./config/network-config.env
-      - path: ./config/services/fendermint.env
-      - path: ./config/services/ethapi.env
+      - ./config/network-config.env
+      - ./config/services/fendermint.env
+      - ./config/services/ethapi.env
     depends_on:
       - fendermint
 
@@ -53,10 +53,23 @@ services:
     volumes:
       - $fendermint_dir:/data
     env_file:
-      - path: ./config/network-config.env
-      - path: ./config/services/fendermint.env
-      - path: ./config/services/objects.env
+      - ./config/network-config.env
+      - ./config/services/fendermint.env
+      - ./config/services/objects.env
     depends_on:
       - fendermint
       - cometbft
       - iroh
+
+  relayer:
+    image: $fendermint_image
+    entrypoint: sh /relayer/run.sh
+    restart: always
+    deploy:
+      replicas: $relayer_replicas
+    volumes:
+      - $relayer_dir:/relayer
+    env_file:
+      - ./config/network-config.env
+    depends_on:
+      - fendermint
