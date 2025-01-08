@@ -1,0 +1,8 @@
+services:
+  faucet:
+    image: $faucet_image
+    restart: always
+    env_file:
+      - ./config/services/faucet.env
+    depends_on:
+      - ethapi

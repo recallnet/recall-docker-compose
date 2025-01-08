@@ -1,0 +1,12 @@
+services:
+  relayer:
+    image: $fendermint_image
+    entrypoint: sh /relayer/run.sh
+    restart: always
+    volumes:
+      - $workdir/relayerr:/relayer
+    env_file:
+      - ./config/network-${network_name}.env
+    depends_on:
+      - fendermint
+

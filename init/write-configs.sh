@@ -22,7 +22,7 @@ validator_address=$(cat /workdir/generated/ipc/evm_keystore.json | jq -r '.[].ad
 echo "validator_address=$validator_address" > /workdir/generated/hoku-exporter.env
 
 # Relayer
-if [ $relayer_replicas == 1 ]; then
+if [ $enable_relayer == "true" ]; then
   mkdir -p /workdir/relayer/ipc
   export relayer_address=$(jq -r '.[].address' < /workdir/relayer/ipc/evm_keystore.json)
   envsubst < /repo/config/services/run-relayer.sh > /workdir/relayer/run.sh

@@ -30,7 +30,7 @@ ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $valida
 
 
 # === Relayer
-if [ $relayer_replicas == 1 ]; then
+if [ $enable_relayer == "true" ]; then
   mkdir -p $relayer_dir/ipc
   cfg=$relayer_dir/ipc/config.toml
   echo "keystore_path = '$relayer_dir/ipc'" > $cfg

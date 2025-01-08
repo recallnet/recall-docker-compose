@@ -71,19 +71,6 @@ services:
     depends_on:
       - ethapi
 
-  relayer:
-    image: $fendermint_image
-    entrypoint: sh /relayer/run.sh
-    restart: always
-    deploy:
-      replicas: $relayer_replicas
-    volumes:
-      - $workdir/relayerr:/relayer
-    env_file:
-      - ./config/network-${network_name}.env
-    depends_on:
-      - fendermint
-
   prometheus:
     image: $prometheus_image
     restart: always
@@ -93,12 +80,3 @@ services:
       --config.file=/etc/prometheus/config.yml
       --storage.tsdb.retention.time=10m
 
-  faucet:
-    image: $faucet_image
-    restart: always
-    env_file:
-      - ./config/services/faucet.env
-    deploy:
-      replicas: $faucet_replicas
-    depends_on:
-      - ethapi
