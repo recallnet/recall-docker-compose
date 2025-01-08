@@ -9,12 +9,9 @@ function set_compose_files {
   source ./config/node-default.env
   source ./config/node.env
   COMPOSE_FILE=./docker-compose.run.yml
-  if [ $enable_faucet == "true" ]; then
-    COMPOSE_FILE="$COMPOSE_FILE:./config/optional/faucet.yml"
-  fi
-  if [ $enable_relayer == "true" ]; then
-    COMPOSE_FILE="$COMPOSE_FILE:./config/optional/relayer.yml"
-  fi
+  [ "$enable_relayer" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/optional/relayer.yml"
+  [ "$enable_faucet" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/optional/faucet.yml"
+  [ "$enable_basin_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/optional/basin-s3.yml"
   export COMPOSE_FILE
 }
 
