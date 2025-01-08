@@ -61,6 +61,17 @@ services:
       - cometbft
       - iroh
 
+  hoku-exporter:
+    image: $hoku_exporter_image
+    restart: always
+    env_file:
+      - $generated_dir/hoku-exporter.env
+      - ./config/secrets.env
+      - ./config/network-config.env
+      - ./config/services/hoku-exporter.env
+    depends_on:
+      - ethapi
+
   relayer:
     image: $fendermint_image
     entrypoint: sh /relayer/run.sh

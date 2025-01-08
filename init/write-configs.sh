@@ -17,6 +17,10 @@ envsubst < /repo/config/services/cometbft.config.toml > $cometbft_dir/config/con
 mkdir -p /workdir/fendermint/config
 envsubst < /repo/config/services/fendermint.config.toml > $fendermint_dir/config/default.toml 
 
+# Hoku exporter
+validator_address=$(cat /workdir/generated/ipc/evm_keystore.json | jq -r '.[].address') 
+echo "validator_address=$validator_address" > /workdir/generated/hoku-exporter.env
+
 # Relayer
 if [ $relayer_replicas == 1 ]; then
   mkdir -p /workdir/relayer/ipc

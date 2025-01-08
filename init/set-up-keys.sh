@@ -23,6 +23,12 @@ fendermint key gen --name network --out-dir $fendermint_dir/keys
 # === CometBFT
 fendermint key into-tendermint -s $fendermint_keys_dir/validator.sk -o $cometbft_dir/config/priv_validator_key.json
 
+# === Generated
+mkdir -p /workdir/generated/ipc
+cfg=/workdir/generated/ipc/config.toml
+echo "keystore_path = '/workdir/generated/ipc'" > $cfg
+ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $validator_private_key
+
 
 # === Relayer
 if [ $relayer_replicas == 1 ]; then
