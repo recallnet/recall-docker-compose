@@ -1,5 +1,5 @@
 
-set -eux
+set -eu
 
 # CometBFT
 if [ "$cometbft_statesync_enable" == "true" ]; then

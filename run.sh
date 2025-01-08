@@ -3,7 +3,7 @@
 set -e
 
 cmd=${@:-up}
-opts="-f ./docker-compose.run.yml --env-file ./config/node.env"
+opts="-f ./docker-compose.run.yml --env-file ./config/node-default.env --env-file ./config/node.env"
 
 docker compose $opts $cmd
 

@@ -1,4 +1,4 @@
-set -eux
+set -eu
 
 # FIX take values from node.env
 cometbft_dir=/workdir/cometbft
