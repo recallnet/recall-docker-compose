@@ -2,7 +2,7 @@
 
 set -e
 
-cmd=$1
+cmd="$@"
 export COMPOSE_ENV_FILES="./config/node-default.env,./config/node.env"
 
 function set_compose_files {
