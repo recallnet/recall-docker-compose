@@ -19,6 +19,8 @@ services:
     env_file:
       - ./config/network-${network_name}.env
       - ./config/services/fendermint.env
+    ports:
+      - $host_bind_ip:$external_fendermint_port:26655
 
   ethapi:
     image: $fendermint_image
@@ -47,6 +49,8 @@ services:
     environment:
       IROH_DATA_DIR: /data
       IROH_CONFIG_DIR: /etc/iroh
+    ports:
+      - $host_bind_ip:$external_iroh_port:11204
 
   objects:
     image: $fendermint_image
