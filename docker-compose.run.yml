@@ -7,6 +7,8 @@ services:
     restart: always
     volumes:
       - $workdir/cometbft:/cometbft
+    ports:
+      - $host_bind_ip:$external_cometbft_port:26656
 
   fendermint:
     image: $fendermint_image
@@ -81,4 +83,14 @@ services:
       --storage.tsdb.retention.time=10m
     ports:
       - $prometheus_bind_address:9090
+
+  caddy:
+    image: $caddy_image
+    restart: always
+    volumes:
+      - $workdir/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - $workdir/caddy/data:/data
+    ports:
+      - $host_bind_ip:$caddy_http_port:80
+      - $host_bind_ip:$caddy_https_port:443
 

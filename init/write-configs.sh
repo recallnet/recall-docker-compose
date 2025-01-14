@@ -21,6 +21,36 @@ envsubst < /repo/config/services/fendermint.config.toml > /workdir/fendermint/co
 validator_address=$(cat /workdir/generated/ipc/evm_keystore.json | jq -r '.[].address')
 echo "validator_address=$validator_address" > /workdir/generated/hoku-exporter.env
 
+# Caddy
+mkdir -p /workdir/caddy
+caddyfile=/workdir/caddy/Caddyfile
+function write_proxy {
+  local dns_name=$1
+  local target=$2
+  cat >> $caddyfile <<EOF
+$dns_name {
+  reverse_proxy $target
+  tls $acme_email
+}
+EOF
+}
+cat > $caddyfile <<EOF
+{
+  servers {
+    metrics
+  }
+}
+http://caddy:9090 {
+  bind 0.0.0.0
+  metrics
+}
+EOF
+write_proxy $dns_api cometbft:26657
+write_proxy $dns_evm ethapi:8545
+write_proxy $dns_objects objects:8001
+write_proxy $dns_faucet faucet:8080
+write_proxy $dns_basin_s3 basin-s3:8014
+
 # Prometheus
 prom_targets_dir=/workdir/prometheus/targets
 rm -rf $prom_targets_dir
