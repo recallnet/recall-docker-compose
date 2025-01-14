@@ -9,6 +9,7 @@ services:
       - $workdir/cometbft:/cometbft
     ports:
       - $host_bind_ip:$external_cometbft_port:26656
+    user: root
 
   fendermint:
     image: $fendermint_image
@@ -37,9 +38,9 @@ services:
 
   iroh:
     image: $iroh_image
-    command: |
+    command: >
       --rpc-addr 0.0.0.0:4919
-      --metrics-addr 0.0.0.0:4920
+      --metrics-addr 0.0.0.0:9090
       --config /etc/iroh/config.toml
       start
     restart: always

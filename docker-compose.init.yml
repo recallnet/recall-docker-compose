@@ -6,6 +6,7 @@ services:
     volumes:
       - $workdir/cometbft:/cometbft
     command: init --home /cometbft
+    user: root
 
   genesis:
     image: $fendermint_image
