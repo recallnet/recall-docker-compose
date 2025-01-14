@@ -79,4 +79,6 @@ services:
     command: >
       --config.file=/etc/prometheus/config.yml
       --storage.tsdb.retention.time=10m
+    ports:
+      - $prometheus_bind_address:9090
 

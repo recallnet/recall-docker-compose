@@ -21,16 +21,28 @@ envsubst < /repo/config/services/fendermint.config.toml > /workdir/fendermint/co
 validator_address=$(cat /workdir/generated/ipc/evm_keystore.json | jq -r '.[].address')
 echo "validator_address=$validator_address" > /workdir/generated/hoku-exporter.env
 
+# Prometheus
+prom_targets_dir=/workdir/prometheus/targets
+rm -rf $prom_targets_dir
+rm -rf /workdir/prometheus/alertmanager
+mkdir -p $prom_targets_dir
+mkdir -p /workdir/prometheus/alertmanager
+envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/config.yml
+
 # Relayer
 if [ $enable_relayer == "true" ]; then
   mkdir -p /workdir/relayer/ipc
   export relayer_address=$(jq -r '.[].address' < /workdir/relayer/ipc/evm_keystore.json)
   envsubst < /repo/config/services/run-relayer.sh > /workdir/relayer/run.sh
   envsubst < /repo/config/services/relayer.ipc.config.toml > /workdir/relayer/ipc/config.toml
+  echo '[{"targets":["relayer:9184"]}]' > $prom_targets_dir/relayer.json
 fi
 
-# Prometheus
-mkdir -p /workdir/prometheus/targets
-mkdir -p /workdir/prometheus/alertmanager
-envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/config.yml
+# if [ $enable_faucet == "true" ]; then
+#   echo '[{"targets":["faucet:9090"]}]' > $prom_targets_dir/faucet.json
+# fi
+
+if [ $enable_basin_s3 == "true" ]; then
+  echo '[{"targets":["basin-s3:9090"]}]' > $prom_targets_dir/basin-s3.json
+fi
 
