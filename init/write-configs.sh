@@ -59,12 +59,18 @@ mkdir -p $prom_targets_dir
 mkdir -p /workdir/prometheus/alertmanager
 envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/config.yml
 
+# ipc-cli
+export validator_address=$(jq -r '.[].address' < /workdir/ipc/evm_keystore.json)
+export keystore_path="/fendermint/.ipc"
+envsubst < /repo/config/services/ipc.config.toml > /workdir/ipc/config.toml
+
 # Relayer
 if [ $enable_relayer == "true" ]; then
   mkdir -p /workdir/relayer/ipc
   export relayer_address=$(jq -r '.[].address' < /workdir/relayer/ipc/evm_keystore.json)
+  export keystore_path=/relayer/ipc
   envsubst < /repo/config/services/run-relayer.sh > /workdir/relayer/run.sh
-  envsubst < /repo/config/services/relayer.ipc.config.toml > /workdir/relayer/ipc/config.toml
+  envsubst < /repo/config/services/ipc.config.toml > /workdir/relayer/ipc/config.toml
   echo '[{"targets":["relayer:9184"]}]' > $prom_targets_dir/relayer.json
 fi
 

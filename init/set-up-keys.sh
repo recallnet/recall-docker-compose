@@ -4,6 +4,7 @@ cometbft_dir=/workdir/cometbft
 fendermint_dir=/workdir/fendermint
 relayer_dir=/workdir/relayer
 fendermint_keys_dir=$fendermint_dir/keys
+ipc_dir=/workdir/ipc
 
 # === Fendermint
 mkdir -p $fendermint_keys_dir
@@ -28,6 +29,11 @@ cfg=/workdir/generated/ipc/config.toml
 echo "keystore_path = '/workdir/generated/ipc'" > $cfg
 ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $validator_private_key
 
+# === ipc-cli
+mkdir -p $ipc_dir
+cfg=$ipc_dir/config.toml
+echo "keystore_path = '$ipc_dir'" > $cfg
+ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $validator_private_key
 
 # === Relayer
 if [ $enable_relayer == "true" ]; then

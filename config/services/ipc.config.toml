@@ -1,4 +1,4 @@
-keystore_path = "/relayer/ipc"
+keystore_path = "$keystore_path"
 
 # Filecoin Calibration
 [[subnets]]
