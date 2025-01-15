@@ -99,3 +99,6 @@ services:
       - $host_bind_ip:$caddy_http_port:80
       - $host_bind_ip:$caddy_https_port:443
 
+networks:
+  default:
+    name: $project_name

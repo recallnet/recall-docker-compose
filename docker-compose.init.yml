@@ -47,3 +47,6 @@ services:
         condition: service_completed_successfully
     env_file: *all-env
 
+networks:
+  default:
+    name: $project_name
