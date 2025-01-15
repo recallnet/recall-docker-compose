@@ -3,6 +3,17 @@ services:
     image: $faucet_image
     restart: always
     env_file:
+      - ./config/network-${network_name}.env
+      - ./config/node.env
       - ./config/services/faucet.env
+    command:
+      - bash
+      - -c
+      - |
+        set -ex
+        export TRUSTED_PROXY_IPS=$(getent hosts caddy | awk '{print $1}')
+        /bin/app start
+
     depends_on:
       - ethapi
+      - caddy
