@@ -4,7 +4,7 @@ services:
     entrypoint: sh /relayer/run.sh
     restart: always
     volumes:
-      - $workdir/relayerr:/relayer
+      - $workdir/relayer:/relayer
     env_file:
       - ./config/network-${network_name}.env
     depends_on:

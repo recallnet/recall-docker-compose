@@ -2,7 +2,7 @@
 
 set -e
 
-cmd="$@"
+cmd="$1"
 export COMPOSE_ENV_FILES="./config/node-default.env,./config/node.env"
 
 function set_compose_files {
@@ -32,7 +32,7 @@ case ${cmd:-"none"} in
 
   *)
     set_compose_files
-    docker compose $cmd
+    docker compose "$@"
     ;;
 esac
 
