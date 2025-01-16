@@ -23,15 +23,24 @@ case ${cmd:-"none"} in
   none)
     echo "Usage: "
     echo "  ./run.sh init"
-    echo "     Initializes the current docker compose folder. Call it after you have edited ./config/node.env"
+    echo "     Initialize the current docker compose folder. Call it after you have edited ./config/node.env"
+    echo "  ./run.sh create-key"
+    echo "     Create a new key"
+    echo "  ./run.sh ipc-cli [args]"
+    echo "     Call ipc-cli \$args"
     echo "  ./run.sh [args]"
-    echo "     Invokes docker compose \$args"
+    echo "     Call docker compose \$args"
     ;;
     
   init)
     export COMPOSE_FILE="./docker-compose.init.yml"
     trap "docker compose down" EXIT
     docker compose up --abort-on-container-failure
+    ;;
+
+  create-key)
+    source_config
+    docker run --name create-key --rm -v $PWD/init/create-key.sh:/bin/create-key.sh --entrypoint /bin/create-key.sh $fendermint_image
     ;;
 
   ipc-cli)
