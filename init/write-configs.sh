@@ -61,6 +61,7 @@ mkdir -p /workdir/prometheus/alertmanager
 mkdir -p /workdir/prometheus/rules
 cp /repo/config/services/alerts.yml /workdir/prometheus/rules/
 envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/config.yml
+[ ! -z $alertmanager_address ] && echo '[{"targets":["'$alertmanager_address'"]}]' > /workdir/prometheus/alertmanager/instance0.json
 
 # ipc-cli
 export validator_address=$(jq -r '.[].address' < /workdir/ipc/evm_keystore.json)
