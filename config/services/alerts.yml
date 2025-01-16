@@ -1,0 +1,72 @@
+groups:
+  - name: hoku-node
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 3m
+        annotations:
+          summary: Validator Component Down
+          description: "Validator component {{ $labels.component }} is down"
+
+      - alert: SubnetRelayerBalanceLow
+        expr: 'hoku_balance{addr_owner="relayer"} / -(deriv(hoku_balance[30m]) < 0) < 16 * 3600' # 16 hours
+        for: 5m
+        annotations:
+          summary: "Subnet Relayer balance is low"
+          description: |
+            Subnet relayer balance on {{ $labels.network_name }} network is low.
+            The available funds are only sufficient for {{ humanizeDuration $value }} of operation.
+
+      - alert: FaucetBalanceLow
+        expr: 'hoku_balance{addr_owner="faucet"} < 1000e18'
+        annotations:
+          summary: "Faucet balance is low"
+          description: |
+            Faucet balance on {{ $labels.network_name }} network is low.
+
+      - alert: HokuExporterJobFailed
+        expr: >
+          rate(hoku_job_run{status="failure"}[5m]) > 0 or
+          absent(hoku_job_run{status="failure"} offset 5m) and on() hoku_job_run{status="failure"} > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "hoku-exporter job failed"
+          description: "`hoku-exporter` job `{{ $labels.job }}` on network {{ $labels.network }} failed"
+
+      - alert: HokuExporterJobStalled
+        expr: rate(hoku_job_run{status="success"}[30m]) == 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "hoku-exporter job stalled"
+          description: "`hoku-exporter` job `{{ $labels.exported_job }}` on network {{ $labels.network }} stalled"
+
+      - alert: MissingCheckpointsFromRelayer
+        expr: hoku_last_bottomup_checkpoint_height - hoku_last_bottomup_checkpoint_height offset 30m == 0
+        annotations:
+          summary: Relayer does not create checkpoints on the parent chain
+
+      - alert: MissingFendermintCheckpoints
+        expr: rate(ipc_bottomup_checkpoint_signed_height[10m]) == 0
+        annotations:
+          summary: Fendermint does not create checkpoints
+
+      - alert: MissingCometbftBlocks
+        expr: rate(abci_committed_block_height[10m]) == 0
+        annotations:
+          summary: Cometbft does not produce blocks
+
+      - alert: ValidatorCollateralDrops
+        expr: rate(hoku_validator_collateral[24h]) < 0
+        labels:
+          severity: warning
+        annotations:
+          summary: Validator unstakes its collateral
+
+      - alert: CaddyUpstreamUnhealthy
+        expr: caddy_reverse_proxy_upstreams_healthy == 0
+        for: 5m
+        annotations:
+          summary: Caddy reverse proxy upstream is unhealthy
+

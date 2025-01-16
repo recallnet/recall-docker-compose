@@ -55,8 +55,11 @@ write_proxy $dns_basin_s3 basin-s3:8014
 prom_targets_dir=/workdir/prometheus/targets
 rm -rf $prom_targets_dir
 rm -rf /workdir/prometheus/alertmanager
+rm -rf /workdir/prometheus/rules
 mkdir -p $prom_targets_dir
 mkdir -p /workdir/prometheus/alertmanager
+mkdir -p /workdir/prometheus/rules
+cp /repo/config/services/alerts.yml /workdir/prometheus/rules/
 envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/config.yml
 
 # ipc-cli

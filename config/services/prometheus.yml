@@ -2,7 +2,7 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-  - job_name: validator-components
+  - job_name: node-components
     static_configs:
       - targets:
           - "hoku-exporter:9010"
@@ -40,6 +40,9 @@ scrape_configs:
       - action: replace
         target_label: subnet_id
         replacement: "$subnet_id"
+      - action: replace
+        target_label: node_name
+        replacement: "$node_name"
 
 
 rule_files:
