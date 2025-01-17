@@ -8,6 +8,7 @@ export COMPOSE_ENV_FILES="./config/node-default.env,./config/node.env"
 function source_config {
   source ./config/node-default.env
   source ./config/node.env
+  source ./config/network-${network_name}.env
 }
 
 function set_compose_files {
@@ -26,6 +27,8 @@ case ${cmd:-"none"} in
     echo "     Initialize the current docker compose folder. Call it after you have edited ./config/node.env"
     echo "  ./run.sh create-key"
     echo "     Create a new key"
+    echo "  ./run.sh join-subnet <collateral in whole tHOKU units>"
+    echo "     Join the subnet with the specified collateral"
     echo "  ./run.sh ipc-cli [args]"
     echo "     Call ipc-cli \$args"
     echo "  ./run.sh [args]"
@@ -41,6 +44,12 @@ case ${cmd:-"none"} in
   create-key)
     source_config
     docker run --name create-key --rm -v $PWD/init/create-key.sh:/bin/create-key.sh --entrypoint /bin/create-key.sh $fendermint_image
+    ;;
+
+  join-subnet)
+    source_config
+    addr=$(jq -r '.[].address' < $workdir/ipc/evm_keystore.json)
+    docker run --name ipc-cli --rm -it --network $project_name -v $PWD/$workdir/ipc:/fendermint/.ipc $fendermint_image ipc-cli subnet join --from $addr --subnet $subnet_id --collateral $2
     ;;
 
   ipc-cli)
