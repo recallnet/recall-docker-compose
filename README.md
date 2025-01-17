@@ -21,5 +21,5 @@ Consider adjusting the following options:
 
 ## Joining network as a validator
 1. Ask for whitelisting in `TODO` telegram channel.
-2. The hoku team will whitelist your address and let you know the required amount in HOKU tokens you can use as collateral to join the subnet as a validator.
-3. Join the subnet `./run.sh join-subnet <collateral in whole HOKU units>`
+2. The hoku team will whitelist your address and let you know the required amount in tHOKU tokens you can use as collateral to join the subnet as a validator.
+3. Join the subnet `./run.sh join-subnet <collateral in whole tHOKU units>`
