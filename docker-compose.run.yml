@@ -51,7 +51,7 @@ services:
       IROH_DATA_DIR: /data
       IROH_CONFIG_DIR: /etc/iroh
     ports:
-      - $host_bind_ip:$external_iroh_port:11204
+      - $host_bind_ip:$external_iroh_port:11204/udp
 
   objects:
     image: $fendermint_image
