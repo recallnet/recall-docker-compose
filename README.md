@@ -2,6 +2,22 @@
 
 This repository contains scripts to deploy a hoku node with docker-compose.
 
+## Hardware Requirements
+
+To run a Hoku validator Node, the following hardware is strongly recommended:
+
+| Hardware          | TestNet  | MainNet   |
+|-------------------|----------|-----------|
+| CPU cores         | 8        | 8         |
+| Memory            | 32 (GB)  | 32 (GB)   |
+| Disk space <sup>(1)</sup>    | 32 (TB)  | 480 (TB)  |
+| Network bandwidth | 1 GB/s   | 1 GB/s    |
+| Public IP Address | 1        | 1         |
+
+<sup>(1)</sup> Plain old hard disks drive levels of performance is acceptable.
+
+Please note that we are working on features that may help alleviate the storage requirement, but those are not available at this time.
+
 ## Starting a node
 1. Copy `config/node-template.env` to `config/node.env`
 2. Edit `config/node.env`. `node.env` overwrites values from `./config/node-default.env`
