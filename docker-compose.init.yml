@@ -27,10 +27,6 @@ services:
       - ./:/repo:ro
       - $workdir:/workdir
     entrypoint: /bin/bash /repo/init/set-up-keys.sh
-    env_file: &all-env
-      - path: ./config/node-default.env
-      - path: ./config/node.env
-      - path: ./config/network-${network_name}.env
 
     depends_on:
       cometbft-init:
@@ -45,7 +41,6 @@ services:
     depends_on:
       keys:
         condition: service_completed_successfully
-    env_file: *all-env
 
 networks:
   default:

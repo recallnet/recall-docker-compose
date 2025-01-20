@@ -1,6 +1,13 @@
 
 set -eu
 
+source /repo/init/read-config.sh
+
+# ipc-cli
+export validator_address=$(jq -r '.[].address' < /workdir/ipc/evm_keystore.json)
+export keystore_path="/fendermint/.ipc"
+envsubst < /repo/config/services/ipc.config.toml > /workdir/ipc/config.toml
+
 # CometBFT
 if [ "$cometbft_statesync_enable" == "true" ]; then
   last_block=$(curl -s https://$seed_node_api_host/abci_info | jq -r '.result.response.last_block_height')
@@ -16,10 +23,6 @@ envsubst < /repo/config/services/cometbft.config.toml > /workdir/cometbft/config
 # Fendermint
 mkdir -p /workdir/fendermint/config
 envsubst < /repo/config/services/fendermint.config.toml > /workdir/fendermint/config/default.toml
-
-# Hoku exporter
-validator_address=$(cat /workdir/generated/ipc/evm_keystore.json | jq -r '.[].address')
-echo "validator_address=$validator_address" > /workdir/generated/hoku-exporter.env
 
 # Caddy
 mkdir -p /workdir/caddy
@@ -63,11 +66,6 @@ cp /repo/config/services/alerts.yml /workdir/prometheus/rules/
 envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/config.yml
 [ ! -z $alertmanager_address ] && echo '[{"targets":["'$alertmanager_address'"]}]' > /workdir/prometheus/alertmanager/instance0.json
 
-# ipc-cli
-export validator_address=$(jq -r '.[].address' < /workdir/ipc/evm_keystore.json)
-export keystore_path="/fendermint/.ipc"
-envsubst < /repo/config/services/ipc.config.toml > /workdir/ipc/config.toml
-
 # Relayer
 if [ $enable_relayer == "true" ]; then
   mkdir -p /workdir/relayer/ipc
@@ -85,4 +83,12 @@ fi
 if [ $enable_basin_s3 == "true" ]; then
   echo '[{"targets":["basin-s3:9090"]}]' > $prom_targets_dir/basin-s3.json
 fi
+
+# === Generated
+mkdir -p /workdir/generated
+set -a
+for cfg in /repo/config/services/*.env; do
+  source $cfg
+  cat $cfg | awk -F '=' '/=/ {print $1 "=\"" ENVIRON[$1] "\""}' > /workdir/generated/$(basename $cfg)
+done
 
