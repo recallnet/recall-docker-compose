@@ -43,7 +43,7 @@ services:
       - $workdir:/workdir
     command: sh /repo/init/write-configs.sh
     depends_on:
-      cometbft-init:
+      keys:
         condition: service_completed_successfully
     env_file: *all-env
 
