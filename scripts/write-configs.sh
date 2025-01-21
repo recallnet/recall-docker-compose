@@ -1,7 +1,7 @@
 
 set -eu
 
-source /repo/init/read-config.sh
+source /repo/scripts/read-config.sh
 
 # ipc-cli
 export validator_address=$(jq -r '.[].address' < /workdir/ipc/evm_keystore.json)

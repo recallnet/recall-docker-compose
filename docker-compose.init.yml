@@ -13,7 +13,7 @@ services:
     volumes:
       - $workdir/cometbft:/cometbft
       - ./:/repo:ro
-    entrypoint: /bin/bash /repo/init/download-genesis.sh
+    entrypoint: /bin/bash /repo/scripts/download-genesis.sh
     env_file:
       - path: ./config/network-${network_name}.env
       - path: ./config/node.env # secrets only
@@ -26,18 +26,19 @@ services:
     volumes:
       - ./:/repo:ro
       - $workdir:/workdir
-    entrypoint: /bin/bash /repo/init/set-up-keys.sh
+    entrypoint: /bin/bash /repo/scripts/set-up-keys.sh
 
     depends_on:
       cometbft-init:
         condition: service_completed_successfully
 
   write-config:
-    build: ./init
+    build:
+      dockerfile: ./scripts/write-configs.Dockerfile
     volumes:
       - ./:/repo:ro
       - $workdir:/workdir
-    command: sh /repo/init/write-configs.sh
+    command: sh /repo/scripts/write-configs.sh
     depends_on:
       keys:
         condition: service_completed_successfully

@@ -5,7 +5,7 @@ set -e
 cmd="$1"
 
 function source_config {
-  source ./init/read-config.sh
+  source ./scripts/read-config.sh
 }
 
 function set_compose_files {
@@ -40,7 +40,7 @@ case ${cmd:-"none"} in
 
   create-key)
     source_config
-    docker run --name create-key --rm -v $PWD/init/create-key.sh:/bin/create-key.sh --entrypoint /bin/create-key.sh $fendermint_image
+    docker run --name create-key --rm -v $PWD/scripts/create-key.sh:/bin/create-key.sh --entrypoint /bin/create-key.sh $fendermint_image
     ;;
 
   join-subnet)

@@ -1,6 +1,6 @@
 set -eu
 
-source /repo/init/read-config.sh
+source /repo/scripts/read-config.sh
 
 cometbft_dir=/workdir/cometbft
 fendermint_dir=/workdir/fendermint
