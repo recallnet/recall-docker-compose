@@ -38,7 +38,7 @@ services:
     volumes:
       - ./:/repo:ro
       - $workdir:/workdir
-    command: sh /repo/scripts/write-configs.sh
+    command: bash /repo/scripts/write-configs.sh
     depends_on:
       keys:
         condition: service_completed_successfully

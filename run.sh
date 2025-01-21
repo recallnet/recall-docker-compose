@@ -4,12 +4,9 @@ set -e
 
 cmd="$1"
 
-function source_config {
-  source ./scripts/read-config.sh
-}
+source ./scripts/read-config.sh
 
 function set_compose_files {
-  source_config
   COMPOSE_FILE=./docker-compose.run.yml
   [ "$enable_relayer" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/optional/relayer.yml"
   [ "$enable_faucet" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/optional/faucet.yml"
@@ -35,22 +32,19 @@ case ${cmd:-"none"} in
   init)
     export COMPOSE_FILE="./docker-compose.init.yml"
     trap "docker compose down" EXIT
-    docker compose up --abort-on-container-failure
+    docker compose up --build --abort-on-container-failure
     ;;
 
   create-key)
-    source_config
     docker run --name create-key --rm -v $PWD/scripts/create-key.sh:/bin/create-key.sh --entrypoint /bin/create-key.sh $fendermint_image
     ;;
 
   join-subnet)
-    source_config
     addr=$(jq -r '.[].address' < $workdir/ipc/evm_keystore.json)
     docker run --name ipc-cli --rm -it --network $project_name -v $PWD/$workdir/ipc:/fendermint/.ipc $fendermint_image ipc-cli subnet join --from $addr --subnet $subnet_id --collateral $2
     ;;
 
   ipc-cli)
-    source_config
     set +e
     docker_network=""
     docker network ls | grep $project_name > /dev/null
