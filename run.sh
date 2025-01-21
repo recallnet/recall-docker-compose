@@ -3,12 +3,9 @@
 set -e
 
 cmd="$1"
-export COMPOSE_ENV_FILES="./config/node-default.env,./config/node.env"
 
 function source_config {
-  source ./config/node-default.env
-  source ./config/node.env
-  source ./config/network-${network_name}.env
+  source ./init/read-config.sh
 }
 
 function set_compose_files {
