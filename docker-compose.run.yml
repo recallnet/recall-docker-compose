@@ -75,7 +75,8 @@ services:
     image: $prometheus_image
     restart: always
     volumes:
-      - $workdir/prometheus:/etc/prometheus
+      - $workdir/prometheus/etc:/etc/prometheus
+      - $workdir/prometheus/data:/prometheus
     command: >
       --config.file=/etc/prometheus/config.yml
       --storage.tsdb.retention.time=10m

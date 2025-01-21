@@ -55,16 +55,16 @@ write_proxy $dns_faucet faucet:8080
 write_proxy $dns_basin_s3 basin-s3:8014
 
 # Prometheus
-prom_targets_dir=/workdir/prometheus/targets
+prom_targets_dir=/workdir/prometheus/etc/targets
 rm -rf $prom_targets_dir
-rm -rf /workdir/prometheus/alertmanager
-rm -rf /workdir/prometheus/rules
+rm -rf /workdir/prometheus/etc/alertmanager
+rm -rf /workdir/prometheus/etc/rules
 mkdir -p $prom_targets_dir
-mkdir -p /workdir/prometheus/alertmanager
-mkdir -p /workdir/prometheus/rules
-cp /repo/config/services/alerts.yml /workdir/prometheus/rules/
-envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/config.yml
-[ ! -z $alertmanager_address ] && echo '[{"targets":["'$alertmanager_address'"]}]' > /workdir/prometheus/alertmanager/instance0.json
+mkdir -p /workdir/prometheus/etc/alertmanager
+mkdir -p /workdir/prometheus/etc/rules
+cp /repo/config/services/alerts.yml /workdir/prometheus/etc/rules/
+envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/etc/config.yml
+[ ! -z $alertmanager_address ] && echo '[{"targets":["'$alertmanager_address'"]}]' > /workdir/prometheus/etc/alertmanager/instance0.json
 
 # Relayer
 if [ $enable_relayer == "true" ]; then
