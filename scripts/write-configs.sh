@@ -86,9 +86,18 @@ fi
 
 # === Generated
 mkdir -p /workdir/generated
+function write_env {
+  local cfg=$1
+  local source_file=/repo/config/services/$1
+  (
+    source $source_file
+    cat $source_file | awk -F '=' '/=/ {print $1 "=\"" ENVIRON[$1] "\""}' > /workdir/generated/$cfg
+  )
+}
 set -a
-for cfg in /repo/config/services/*.env; do
-  source $cfg
-  cat $cfg | awk -F '=' '/=/ {print $1 "=\"" ENVIRON[$1] "\""}' > /workdir/generated/$(basename $cfg)
-done
+write_env fendermint.env
+write_env ethapi.env
+write_env objects.env
+write_env hoku-exporter.env
+if [ $enable_faucet == "true" ]; then write_env faucet.env; fi
 
