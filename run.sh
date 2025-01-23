@@ -23,6 +23,8 @@ case ${cmd:-"none"} in
     echo "     Create a new key"
     echo "  ./run.sh join-subnet <collateral in whole tHOKU units>"
     echo "     Join the subnet with the specified collateral"
+    echo "  ./run.sh node-info"
+    echo "     Print node info"
     echo "  ./run.sh ipc-cli [args]"
     echo "     Call ipc-cli \$args"
     echo "  ./run.sh [args]"
@@ -42,6 +44,15 @@ case ${cmd:-"none"} in
   join-subnet)
     addr=$(jq -r '.[].address' < $workdir/ipc/evm_keystore.json)
     docker run --name ipc-cli --rm -it --network $project_name -v $PWD/$workdir/ipc:/fendermint/.ipc $fendermint_image ipc-cli subnet join --from $addr --subnet $subnet_id --collateral $2
+    ;;
+
+  node-info)
+    # set -x
+    cometbft_id=$(docker exec ${project_name}-cometbft-1 cometbft show-node-id)
+    fendermint_id=$(docker exec ${project_name}-fendermint-1 fendermint key show-peer-id --public-key /data/keys/network.pk)
+    echo "cometbft API URL: https://${dns_api}:443"
+    echo "commetbft: $cometbft_id@${dns_api}:26656"
+    echo "fendermint: /dns/$dns_api/tcp/26655/p2p/$fendermint_id"
     ;;
 
   ipc-cli)
