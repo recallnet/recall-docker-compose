@@ -62,6 +62,8 @@ rm -rf /workdir/prometheus/etc/rules
 mkdir -p $prom_targets_dir
 mkdir -p /workdir/prometheus/etc/alertmanager
 mkdir -p /workdir/prometheus/etc/rules
+mkdir -p /workdir/prometheus/data
+chown nobody /workdir/prometheus/data
 cp /repo/config/services/alerts.yml /workdir/prometheus/etc/rules/
 envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/etc/config.yml
 [ ! -z $alertmanager_address ] && echo '[{"targets":["'$alertmanager_address'"]}]' > /workdir/prometheus/etc/alertmanager/instance0.json
