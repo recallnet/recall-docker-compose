@@ -1,0 +1,10 @@
+networks:
+  external1:
+    name: $prometheus_external_network
+    external: true
+
+services:
+  prometheus:
+    networks:
+      - default
+      - external1

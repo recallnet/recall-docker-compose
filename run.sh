@@ -11,6 +11,7 @@ function set_compose_files {
   [ "$enable_relayer" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/relayer.yml"
   [ "$enable_faucet" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/faucet.yml"
   [ "$enable_basin_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/basin-s3.yml"
+  [ ! -z "$prometheus_external_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/prometheus-network.yml"
   export COMPOSE_FILE
 }
 
