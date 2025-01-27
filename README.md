@@ -33,7 +33,7 @@ Please note that we are working on features that may help alleviate the storage 
 More advanced configuration options can be found `./config/node-default.env`
 Consider adjusting the following options:
 * `datadir` that contains the uploaded user blobs, default `./workdir/data`
-* `alertmanager_address` - prometheus server will push alerts to the specified address.
+* `prometheus_external_network` - external docker network that prometheus will join. This can be used to scrape metrics from prometheus in another prometheus instance in an external network.
 
 ## Joining network as a validator
 1. Ask for whitelisting in `TODO` telegram channel.

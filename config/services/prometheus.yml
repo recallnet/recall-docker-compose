@@ -6,32 +6,12 @@ scrape_configs:
     static_configs:
       - targets:
           - "hoku-exporter:9010"
-        labels:
-          component: hoku-exporter
-      - targets:
           - "cometbft:26660"
-        labels:
-          component: cometbft
-      - targets:
           - "fendermint:9184"
-        labels:
-          component: fendermint
-      - targets:
           - "iroh:9090"
-        labels:
-          component: iroh
-      - targets:
           - "objects:9186"
-        labels:
-          component: objects
-      - targets:
           - "ethapi:9185"
-        labels:
-          component: ethapi
-      - targets:
           - "caddy:9090"
-        labels:
-          component: caddy
     file_sd_configs:
       - files:
         - /etc/prometheus/targets/*.json
@@ -51,9 +31,3 @@ scrape_configs:
 rule_files:
   - "/etc/prometheus/rules/*.yml"
 
-alerting:
-  alertmanagers:
-    - file_sd_configs:
-      - files:
-        - /etc/prometheus/alertmanager/*.json
-        - /etc/prometheus/alertmanager/*.yml
