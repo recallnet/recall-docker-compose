@@ -74,15 +74,18 @@ if [ $enable_relayer == "true" ]; then
   echo '[{"targets":["relayer:9184"]}]' > $prom_targets_dir/relayer.json
 fi
 
-# if [ $enable_faucet == "true" ]; then
-#   echo '[{"targets":["faucet:9090"]}]' > $prom_targets_dir/faucet.json
-# fi
+if [ $enable_faucet == "true" ]; then
+  export hoku_exporter_subnet_faucet_contract_address=$subnet_faucet_contract_address
+  # Uncomment when registrar implements prometheus metrics.
+  # echo '[{"targets":["faucet:9090"]}]' > $prom_targets_dir/faucet.json
+fi
 
 if [ $enable_basin_s3 == "true" ]; then
   echo '[{"targets":["basin-s3:9090"]}]' > $prom_targets_dir/basin-s3.json
 fi
 
 # === Generated
+# It's using some environment variables set above!!!
 mkdir -p /workdir/generated
 function write_env {
   local cfg=$1
