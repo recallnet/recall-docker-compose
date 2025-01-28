@@ -39,3 +39,17 @@ Consider adjusting the following options:
 1. Ask for whitelisting in `TODO` telegram channel.
 2. The hoku team will whitelist your address and let you know the required amount in tHOKU tokens you can use as collateral to join the subnet as a validator.
 3. Join the subnet `./run.sh join-subnet <collateral in whole tHOKU units>`
+
+## Hoku Node Components
+* [CometBFT](https://cometbft.com/), a standard blockchain application platform for consensus
+* [Fendermint](https://github.com/hokunet/ipc/blob/main/docs/fendermint), a specialized ABCI++ interface to FEVM/FVM
+* Ethereum RPC, a standard endpoint for ETH API access (provided by fendermint).
+* Blob API, the Hoku endpoint for data blob storage and retrieval (provided by fendermint)
+* [Iroh](https://github.com/n0-computer/iroh), provides data synchronization between nodes
+* [hoku-exporter](https://github.com/hokunet/hoku-exporter), scrapes subnet specific metrics
+
+## Monitoring
+There is a prometheus instance that scrapes metrics from all hoku node compoenents.
+You can deploy an additional prometheus server and scrape metrics from the node prometheus.
+For details see [prometheus docs on federation](https://prometheus.io/docs/prometheus/latest/federation/).
+If your prometheus server is running in a docker container, you can set `prometheus_external_network` to make prometheus container to join an external network.
