@@ -330,7 +330,7 @@ vote_timeout = 60
 
 [ipc.topdown]
 parent_http_endpoint = "$parent_endpoint"
-parent_http_auth_token = "$parent_endpoint_token"
+$fendermint_parent_endpoint_token
 parent_gateway = "$parent_gateway_address"
 parent_registry = "$parent_registry_address"
 chain_head_delay = 10

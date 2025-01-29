@@ -25,7 +25,7 @@ function download_from_parent_chain {
     ipc from-parent \
     --subnet-id $subnet_id \
     --parent-endpoint $parent_endpoint \
-    --parent-auth-token $parent_endpoint_token \
+    ${parent_endpoint_token:+--parent-auth-token $parent_endpoint_token} \
     --parent-gateway $parent_gateway_address \
     --parent-registry $parent_registry_address
 

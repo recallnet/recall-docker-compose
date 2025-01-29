@@ -7,7 +7,7 @@ id = "/r314159"
 [subnets.config]
 network_type = "fevm"
 provider_http = "$parent_endpoint"
-auth_token = "$parent_endpoint_token"
+$ipc_config_parent_endpoint_token
 gateway_addr = "$parent_gateway_address"
 registry_addr = "$parent_registry_address"
 

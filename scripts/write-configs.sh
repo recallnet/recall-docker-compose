@@ -3,6 +3,15 @@ set -eu
 
 source /repo/scripts/read-config.sh
 
+# === parent endpoint token
+set +u
+if [ ! -z "$parent_endpoint_token" ]; then
+  export hoku_exporter_parent_endpoint_token="$parent_endpoint_token"
+  export ipc_config_parent_endpoint_token="auth_token = '$parent_endpoint_token'"
+  export fendermint_parent_endpoint_token="parent_http_auth_token = '$parent_endpoint_token'"
+fi
+set -u
+
 # ipc-cli
 export validator_address=$(jq -r '.[].address' < /workdir/ipc/evm_keystore.json)
 export keystore_path="/fendermint/.ipc"
