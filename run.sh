@@ -36,7 +36,8 @@ case ${cmd:-"none"} in
   init)
     export COMPOSE_FILE="./docker-compose.init.yml"
     trap "docker compose down" EXIT
-    docker compose up --build --abort-on-container-failure
+    docker compose build
+    docker compose up --abort-on-container-failure
     ;;
 
   create-key)

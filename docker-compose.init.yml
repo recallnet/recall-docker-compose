@@ -8,17 +8,26 @@ services:
     command: init --home /cometbft
     user: root
 
+  genesis-from-peer:
+    image: &utils ${project_name}-init-utils
+    build:
+      dockerfile: ./scripts/utils.Dockerfile
+    volumes:
+      - $workdir/cometbft:/cometbft
+      - ./:/repo:ro
+    command: /bin/bash /repo/scripts/download-genesis.sh
+    depends_on:
+      cometbft-init:
+        condition: service_completed_successfully
+
   genesis:
     image: $fendermint_image
     volumes:
       - $workdir/cometbft:/cometbft
       - ./:/repo:ro
     entrypoint: /bin/bash /repo/scripts/download-genesis.sh
-    env_file:
-      - path: ./config/network-${network_name}.env
-      - path: ./config/node.env # secrets only
     depends_on:
-      cometbft-init:
+      genesis-from-peer:
         condition: service_completed_successfully
 
   keys:
@@ -33,8 +42,7 @@ services:
         condition: service_completed_successfully
 
   write-config:
-    build:
-      dockerfile: ./scripts/write-configs.Dockerfile
+    image: *utils
     volumes:
       - ./:/repo:ro
       - $workdir:/workdir
