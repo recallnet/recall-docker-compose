@@ -5,7 +5,7 @@ scrape_configs:
   - job_name: node-components
     static_configs:
       - targets:
-          - "hoku-exporter:9010"
+          - "recall-exporter:9010"
           - "cometbft:26660"
           - "fendermint:9184"
           - "iroh:9090"

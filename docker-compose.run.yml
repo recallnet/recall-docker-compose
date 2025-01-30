@@ -63,11 +63,11 @@ services:
       - cometbft
       - iroh
 
-  hoku-exporter:
-    image: $hoku_exporter_image
+  recall-exporter:
+    image: $recall_exporter_image
     restart: always
     env_file:
-      - $workdir/generated/hoku-exporter.env
+      - $workdir/generated/recall-exporter.env
     depends_on:
       - ethapi
 
