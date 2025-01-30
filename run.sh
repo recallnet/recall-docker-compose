@@ -46,7 +46,17 @@ case ${cmd:-"none"} in
 
   join-subnet)
     addr=$(jq -r '.[].address' < $workdir/ipc/evm_keystore.json)
-    docker run --name ipc-cli --rm -it --network $project_name -v $PWD/$workdir/ipc:/fendermint/.ipc $fendermint_image ipc-cli subnet join --from $addr --subnet $subnet_id --collateral $2
+    private_key=0x$(jq -r '.[].private_key' < $workdir/ipc/evm_keystore.json)
+    collateral=$2
+    echo "== Approving collateral"
+    docker run --name cast --rm -it ghcr.io/foundry-rs/foundry:latest "cast send \
+      --private-key $private_key \
+      --rpc-url $parent_endpoint${parent_endpoint_token:+"?token=$parent_endpoint_token"} \
+      --timeout 120 \
+      --confirmations 10 \
+      $parent_supply_source_address 'approve(address,uint256)' $parent_subnet_contract_address $(($collateral * 10**18))"
+    echo "== Joining subnet"
+    docker run --name ipc-cli --rm -it --network $project_name -v $PWD/$workdir/ipc:/fendermint/.ipc $fendermint_image ipc-cli subnet join --from $addr --subnet $subnet_id --collateral $collateral
     ;;
 
   node-info)
