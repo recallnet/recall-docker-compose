@@ -366,7 +366,7 @@ rpc_servers = "$cometbft_rpc_servers,$cometbft_rpc_servers"
 # The height may not be higher than the latest snapshat height: https://github.com/cosmos/cosmos-sdk/issues/20990
 trust_height = $trusted_block_height
 # Pick a block height and get it from a root validator
-# curl -s https://api-ignition-0.recall.network/block?height=2500000 | jq -r '.result.block_id.hash'
+# curl -s https://api.node-0.testnet.recall.network/block?height=2500000 | jq -r '.result.block_id.hash'
 trust_hash = "$trusted_block_hash"
 trust_period = "168h0m0s"
 
