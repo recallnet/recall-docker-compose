@@ -23,7 +23,7 @@ case ${cmd:-"none"} in
     echo "     Initialize the current docker compose folder. Call it after you have edited ./config/node.env"
     echo "  ./run.sh create-key"
     echo "     Create a new key"
-    echo "  ./run.sh join-subnet <collateral in whole tHOKU units>"
+    echo "  ./run.sh join-subnet <collateral in whole RECALL units>"
     echo "     Join the subnet with the specified collateral"
     echo "  ./run.sh node-info"
     echo "     Print node info"

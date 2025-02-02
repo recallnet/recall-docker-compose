@@ -6,7 +6,7 @@ source /repo/scripts/read-config.sh
 # === parent endpoint token
 set +u
 if [ ! -z "$parent_endpoint_token" ]; then
-  export hoku_exporter_parent_endpoint_token="$parent_endpoint_token"
+  export recall_exporter_parent_endpoint_token="$parent_endpoint_token"
   export ipc_config_parent_endpoint_token="auth_token = '$parent_endpoint_token'"
   export fendermint_parent_endpoint_token="parent_http_auth_token = '$parent_endpoint_token'"
 fi
@@ -84,7 +84,7 @@ if [ $enable_relayer == "true" ]; then
 fi
 
 if [ $enable_faucet == "true" ]; then
-  export hoku_exporter_subnet_faucet_contract_address=$subnet_faucet_contract_address
+  export recall_exporter_subnet_faucet_contract_address=$subnet_faucet_contract_address
   # Uncomment when registrar implements prometheus metrics.
   # echo '[{"targets":["faucet:9090"]}]' > $prom_targets_dir/faucet.json
 fi
@@ -108,6 +108,6 @@ set -a
 write_env fendermint.env
 write_env ethapi.env
 write_env objects.env
-write_env hoku-exporter.env
+write_env recall-exporter.env
 if [ $enable_faucet == "true" ]; then write_env faucet.env; fi
 
