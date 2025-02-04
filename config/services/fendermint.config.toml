@@ -28,6 +28,9 @@ read_request_concurrency = 10
 # Interval in blocks at which to emit blob metrics
 blob_metrics_interval = 10
 
+# Gas limit used by the system actor to manage blob queues.
+blob_queue_gas_limit = 500000000
+
 # Secp256k1 private key used for signing transactions. Leave empty if not validating,
 # or if it's not needed to sign and broadcast transactions as a validator.
 # Leaving empty by default so single node deployments don't fail to start because
