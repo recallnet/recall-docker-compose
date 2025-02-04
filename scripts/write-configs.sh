@@ -109,5 +109,6 @@ write_env fendermint.env
 write_env ethapi.env
 write_env objects.env
 write_env recall-exporter.env
+if [ $enable_basin_s3 == "true" ]; then write_env basin-s3.env; fi
 if [ $enable_faucet == "true" ]; then write_env faucet.env; fi
 
