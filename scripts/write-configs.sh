@@ -61,7 +61,7 @@ write_proxy $dns_api cometbft:26657
 write_proxy $dns_evm ethapi:8545
 write_proxy $dns_objects objects:8001
 write_proxy $dns_faucet faucet:8080
-write_proxy $dns_basin_s3 basin-s3:8014
+write_proxy $dns_recall_s3 recall-s3:8014
 
 # Prometheus
 prom_targets_dir=/workdir/prometheus/etc/targets
@@ -89,8 +89,8 @@ if [ $enable_faucet == "true" ]; then
   # echo '[{"targets":["faucet:9090"]}]' > $prom_targets_dir/faucet.json
 fi
 
-if [ $enable_basin_s3 == "true" ]; then
-  echo '[{"targets":["basin-s3:9090"]}]' > $prom_targets_dir/basin-s3.json
+if [ $enable_recall_s3 == "true" ]; then
+  echo '[{"targets":["recall-s3:9090"]}]' > $prom_targets_dir/recall-s3.json
 fi
 
 # === Generated
@@ -109,6 +109,6 @@ write_env fendermint.env
 write_env ethapi.env
 write_env objects.env
 write_env recall-exporter.env
-if [ $enable_basin_s3 == "true" ]; then write_env basin-s3.env; fi
+if [ $enable_recall_s3 == "true" ]; then write_env recall-s3.env; fi
 if [ $enable_faucet == "true" ]; then write_env faucet.env; fi
 

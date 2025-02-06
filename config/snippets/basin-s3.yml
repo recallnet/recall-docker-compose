@@ -1,8 +1,0 @@
-services:
-  basin-s3:
-    image: $basin_s3_image
-    restart: always
-    env_file: $workdir/generated/basin-s3.env
-    depends_on:
-      - cometbft
-      - objects
