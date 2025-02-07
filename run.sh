@@ -10,7 +10,7 @@ function set_compose_files {
   COMPOSE_FILE=./docker-compose.run.yml
   [ "$enable_relayer" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/relayer.yml"
   [ "$enable_faucet" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/faucet.yml"
-  [ "$enable_basin_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/basin-s3.yml"
+  [ "$enable_recall_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/recall-s3.yml"
   [ ! -z "$prometheus_external_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/prometheus-network.yml"
   [ ! -z "$prometheus_bind_address" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/prometheus-port-mapping.yml"
   export COMPOSE_FILE
