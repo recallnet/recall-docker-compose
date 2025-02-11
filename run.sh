@@ -13,6 +13,11 @@ function set_compose_files {
   [ "$enable_recall_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/recall-s3.yml"
   [ ! -z "$prometheus_external_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/prometheus-network.yml"
   [ ! -z "$prometheus_bind_address" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/prometheus-port-mapping.yml"
+  if [ ! -z "$http_external_network" ]; then
+    COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network.yml"
+    [ "$enable_faucet" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-faucet.yml"
+    [ "$enable_recall_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-recall-s3.yml"
+  fi
   export COMPOSE_FILE
 }
 
