@@ -1,0 +1,18 @@
+networks:
+  external-http:
+    name: $http_external_network
+    external: true
+
+services:
+  cometbft:
+    networks:
+      - default
+      - external-http
+  ethapi:
+    networks:
+      - default
+      - external-http
+  objects:
+    networks:
+      - default
+      - external-http

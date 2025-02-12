@@ -1,0 +1,5 @@
+services:
+  recall-s3:
+    networks:
+      - default
+      - external-http
