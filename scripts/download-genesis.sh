@@ -31,8 +31,8 @@ function download_from_parent_chain {
 
   fendermint genesis --genesis-file $raw set-eam-permissions --mode unrestricted
   set +u
-  if [ ! -z "$chain_id" ]; then
-    fendermint genesis --genesis-file $raw set-chain-id --chain-id $chain_id
+  if [ ! -z "$subnet_chain_id" ]; then
+    fendermint genesis --genesis-file $raw set-chain-id --chain-id $subnet_chain_id
   fi
   set -u
 
