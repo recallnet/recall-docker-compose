@@ -18,6 +18,7 @@ function set_compose_files {
     [ "$enable_faucet" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-faucet.yml"
     [ "$enable_recall_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-recall-s3.yml"
   fi
+  [ ! -z "$external_default_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/external-default-network.yml"
   export COMPOSE_FILE
 }
 
@@ -40,6 +41,7 @@ case ${cmd:-"none"} in
     
   init)
     export COMPOSE_FILE="./docker-compose.init.yml"
+    [ ! -z "$external_default_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/external-default-network.yml"
     trap "docker compose down" EXIT
     docker compose build
     docker compose up --abort-on-container-failure
