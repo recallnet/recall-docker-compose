@@ -20,6 +20,7 @@ function set_compose_files {
   fi
   [ ! -z "$external_default_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/external-default-network.yml"
   [ ! -z "$ethapi_bind_address" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/ethapi-port-mapping.yml"
+  [ ! -z "$host_bind_ip" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/port-mapping.yml"
   export COMPOSE_FILE
 }
 

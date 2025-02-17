@@ -25,6 +25,9 @@ if [ "$cometbft_statesync_enable" == "true" ]; then
 else
   export trusted_block_height=0
 fi
+if [ ! -z "$advertised_external_ip" ]; then
+  export cometbft_external_address="$advertised_external_ip:$external_cometbft_port"
+fi
 
 envsubst < /repo/config/services/cometbft.config.toml > /workdir/cometbft/config/config.toml
 
