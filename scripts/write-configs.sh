@@ -19,9 +19,15 @@ envsubst < /repo/config/services/ipc.config.toml > /workdir/ipc/config.toml
 
 # CometBFT
 if [ "$cometbft_statesync_enable" == "true" ]; then
-  last_block=$(curl -s https://$seed_node_api_host/abci_info | jq -r '.result.response.last_block_height')
-  export trusted_block_height=$(($last_block - $fendermint_snapshot_block_interval))
-  export trusted_block_hash=$(curl -s https://$seed_node_api_host/block?height=$trusted_block_height | jq -r '.result.block_id.hash')
+  first_server=$(echo $cometbft_rpc_servers | sed -e s/',.*'//)
+  last_block=$(curl -s $first_server/abci_info | jq -r '.result.response.last_block_height')
+  if [ $last_block -gt $fendermint_snapshot_block_interval ]; then
+    export trusted_block_height=$(($last_block - $fendermint_snapshot_block_interval))
+    export trusted_block_hash=$(curl -s https://$seed_node_api_host/block?height=$trusted_block_height | jq -r '.result.block_id.hash')
+  else
+    export cometbft_statesync_enable="false"
+    export trusted_block_height=0
+  fi
 else
   export trusted_block_height=0
 fi
