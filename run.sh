@@ -71,9 +71,8 @@ case ${cmd:-"none"} in
     # set -x
     cometbft_id=$(docker exec ${project_name}-cometbft-1 cometbft show-node-id)
     fendermint_id=$(docker exec ${project_name}-fendermint-1 fendermint key show-peer-id --public-key /data/keys/network.pk)
-    echo "cometbft API URL: https://${dns_api}:443"
-    echo "commetbft: $cometbft_id@${dns_api}:26656"
-    echo "fendermint: /dns/$dns_api/tcp/26655/p2p/$fendermint_id"
+    echo "cometbft_id: $cometbft_id"
+    echo "fendermint_id: $fendermint_id"
     ;;
 
   ipc-cli)
