@@ -1,0 +1,4 @@
+services:
+  ethapi:
+    ports:
+      - $ethapi_bind_address:8545

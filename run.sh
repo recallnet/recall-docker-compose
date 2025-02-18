@@ -18,6 +18,9 @@ function set_compose_files {
     [ "$enable_faucet" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-faucet.yml"
     [ "$enable_recall_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-recall-s3.yml"
   fi
+  [ ! -z "$external_default_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/external-default-network.yml"
+  [ ! -z "$ethapi_bind_address" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/ethapi-port-mapping.yml"
+  [ ! -z "$host_bind_ip" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/port-mapping.yml"
   export COMPOSE_FILE
 }
 
@@ -40,6 +43,7 @@ case ${cmd:-"none"} in
     
   init)
     export COMPOSE_FILE="./docker-compose.init.yml"
+    [ ! -z "$external_default_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/external-default-network.yml"
     trap "docker compose down" EXIT
     docker compose build
     docker compose up --abort-on-container-failure
@@ -68,9 +72,8 @@ case ${cmd:-"none"} in
     # set -x
     cometbft_id=$(docker exec ${project_name}-cometbft-1 cometbft show-node-id)
     fendermint_id=$(docker exec ${project_name}-fendermint-1 fendermint key show-peer-id --public-key /data/keys/network.pk)
-    echo "cometbft API URL: https://${dns_api}:443"
-    echo "commetbft: $cometbft_id@${dns_api}:26656"
-    echo "fendermint: /dns/$dns_api/tcp/26655/p2p/$fendermint_id"
+    echo "cometbft_id: $cometbft_id"
+    echo "fendermint_id: $fendermint_id"
     ;;
 
   ipc-cli)

@@ -2,7 +2,7 @@ keystore_path = "$keystore_path"
 
 # Filecoin Calibration
 [[subnets]]
-id = "/r314159"
+id = "/r${parent_chain_id}"
 
 [subnets.config]
 network_type = "fevm"
