@@ -19,7 +19,9 @@ trap "rm -f $eth_pk" EXIT
 fendermint key from-eth -s $eth_pk -n validator -o $fendermint_dir/keys
 
 # Network key
-fendermint key gen --name network --out-dir $fendermint_dir/keys
+if [ ! -e $fendermint_dir/keys/network.pk ]; then
+  fendermint key gen --name network --out-dir $fendermint_dir/keys
+fi
 
 
 # === CometBFT
