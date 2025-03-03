@@ -22,7 +22,7 @@ Please note that we are working on features that may help alleviate the storage 
 1. Copy `config/node-template.env` to `config/node.env`
 2. Edit `config/node.env`. `node.env` overwrites values from `./config/node-default.env`
    * Note: you can create new keys with `./run.sh create-key`.
-   * Note: the node address must be known on the network. Visit https://faucet.node-0.testnet.recall.network/ to receive funds.
+   * Note: the node address must be known on the network. Visit https://faucet.recall.network/ to receive funds.
 3. Run `./run.sh init` - This will create required configuration for node services based on your configuration in `node.env`.
 4. Run `./run.sh up` or `./run.sh up -d` to run detached.
    * The node will download the latest snapshot and start syncronizing remaining blocks.
