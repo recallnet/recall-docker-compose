@@ -129,7 +129,7 @@ max_open_connections = 900
 # Maximum number of unique clientIDs that can /subscribe
 # If you're using /broadcast_tx_commit, set to the estimated maximum number
 # of broadcast_tx_commit calls per block.
-max_subscription_clients = 10
+max_subscription_clients = 1000
 
 # Maximum number of unique queries a given client can /subscribe to
 # If you're using GRPC (or Local RPC client) and /broadcast_tx_commit, set to
@@ -432,7 +432,7 @@ skip_timeout_commit = false
 
 # EmptyBlocks mode and possible interval between empty blocks
 create_empty_blocks = true
-create_empty_blocks_interval = "0s"
+create_empty_blocks_interval = "1s"
 
 # Reactor sleep duration parameters
 peer_gossip_sleep_duration = "100ms"
