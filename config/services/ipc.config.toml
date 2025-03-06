@@ -15,7 +15,7 @@ registry_addr = "$parent_registry_address"
 id = "$subnet_id"
 [subnets.config]
 network_type = "fevm"
-provider_http = "http://ethapi:8545"
+provider_http = "http://${project_name}-ethapi-1:8545"
 
 # These are static and deployed at subnet genesis
 gateway_addr = "0x77aa40b105843728088c0132e43fc44348881da8"

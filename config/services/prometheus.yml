@@ -5,16 +5,16 @@ scrape_configs:
   - job_name: node-components
     static_configs:
       - targets:
-          - "recall-exporter:9010"
-          - "cometbft:26660"
-          - "fendermint:9184"
-          - "iroh:9090"
-          - "objects:9186"
-          - "ethapi:9185"
+          - "${project_name}-recall-exporter-1:9010"
+          - "${project_name}-cometbft-1:26660"
+          - "${project_name}-fendermint-1:9184"
+          - "${project_name}-iroh-1:9090"
+          - "${project_name}-objects-1:9186"
+          - "${project_name}-ethapi-1:9185"
     file_sd_configs:
       - files:
-        - /etc/prometheus/targets/*.json
-        - /etc/prometheus/targets/*.yml
+          - /etc/prometheus/targets/*.json
+          - /etc/prometheus/targets/*.yml
     relabel_configs:
       - action: replace
         target_label: subnet_id
@@ -26,7 +26,5 @@ scrape_configs:
         target_label: network_name
         replacement: "$network_name"
 
-
 rule_files:
   - "/etc/prometheus/rules/*.yml"
-
