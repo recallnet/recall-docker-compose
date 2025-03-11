@@ -40,13 +40,9 @@ case ${cmd:-"none"} in
     echo "  ./run.sh [args]"
     echo "     Call docker compose \$args"
     ;;
-    
+
   init)
-    export COMPOSE_FILE="./docker-compose.init.yml"
-    [ ! -z "$external_default_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/external-default-network.yml"
-    trap "docker compose down" EXIT
-    docker compose build
-    docker compose up --abort-on-container-failure
+    ./scripts/init.sh
     ;;
 
   create-key)
@@ -90,5 +86,3 @@ case ${cmd:-"none"} in
     docker compose "$@"
     ;;
 esac
-
-

@@ -69,13 +69,10 @@ function download_from_peer {
   rm -f $genesis_chunk
 }
 
-has_fendermint_command=$(command -v fendermint &> /dev/null && echo "true" || echo "false")
 if [ "$cometbft_statesync_enable" == "true" ]; then
   download_from_peer
-elif [ "$has_fendermint_command" == "true" ]; then
-  download_from_parent_chain
 else
-  exit 0;
+  download_from_parent_chain
 fi
 
 cp $dest /cometbft/config/
