@@ -38,6 +38,9 @@ function validate-config {
 }
 
 rm -f $log_file
+set +e
+docker rm -f recall-init &> /dev/null
+set -e
 
 log-job-name "Validate config"
 validate-config
