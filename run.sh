@@ -40,7 +40,7 @@ case ${cmd:-"none"} in
     echo "  ./run.sh [args]"
     echo "     Call docker compose \$args"
     ;;
-    
+
   init)
     export COMPOSE_FILE="./docker-compose.init.yml"
     [ ! -z "$external_default_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/external-default-network.yml"
@@ -65,7 +65,7 @@ case ${cmd:-"none"} in
       --confirmations 10 \
       $parent_supply_source_address 'approve(address,uint256)' $parent_subnet_contract_address $(($collateral * 10**18))"
     echo "== Joining subnet"
-    docker run --name ipc-cli --rm -it --network $project_name -v $PWD/$workdir/ipc:/fendermint/.ipc $fendermint_image ipc-cli subnet join --from $addr --subnet $subnet_id --collateral $collateral
+    docker run --name ipc-cli --rm -it --network $project_name -v $(cd $workdir; pwd)/ipc:/fendermint/.ipc $fendermint_image ipc-cli subnet join --from $addr --subnet $subnet_id --collateral $collateral
     ;;
 
   node-info)
@@ -82,7 +82,7 @@ case ${cmd:-"none"} in
     docker network ls | grep $project_name > /dev/null
     [ $? == 0 ] && docker_network="--network $project_name"
     set -e
-    docker run --name ipc-cli --rm -it $docker_network -v $PWD/$workdir/ipc:/fendermint/.ipc $fendermint_image "$@"
+    docker run --name ipc-cli --rm -it $docker_network -v $(cd $workdir; pwd)/ipc:/fendermint/.ipc $fendermint_image "$@"
     ;;
 
   *)
@@ -90,5 +90,3 @@ case ${cmd:-"none"} in
     docker compose "$@"
     ;;
 esac
-
-
