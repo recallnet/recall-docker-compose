@@ -20,7 +20,14 @@ function run-docker {
     flags="--network $external_default_network"
   fi
   set -u
-  docker run --name recall-init --rm -it $flags "$@"
+
+  if [ -t 1 ]; then
+    # Terminal is interactive
+    docker run --name recall-init --rm -it $flags "$@"
+  else
+    # Non-interactive environment (CI)
+    docker run --name recall-init --rm $flags "$@"
+  fi
 }
 
 function log-job-name {
