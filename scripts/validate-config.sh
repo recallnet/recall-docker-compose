@@ -16,8 +16,10 @@ if [ $? != 0 ]; then
 fi
 
 set -e
-address=$(cast wallet address $node_private_key)
-balance=$(cast balance --rpc-url $evm_rpc_url $address)
-if [ $balance == 0 ]; then
-  fail "no funds on subnet for the node address $address"
+if [ ! -z "$evm_rpc_url" ]; then
+  address=$(cast wallet address $node_private_key)
+  balance=$(cast balance --rpc-url $evm_rpc_url $address)
+  if [ $balance == 0 ]; then
+    fail "no funds on subnet for the node address $address"
+  fi
 fi
