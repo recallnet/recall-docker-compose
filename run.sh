@@ -42,11 +42,7 @@ case ${cmd:-"none"} in
     ;;
 
   init)
-    export COMPOSE_FILE="./docker-compose.init.yml"
-    [ ! -z "$external_default_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/external-default-network.yml"
-    trap "docker compose down" EXIT
-    docker compose build
-    docker compose up --abort-on-container-failure
+    ./scripts/init.sh
     ;;
 
   create-key)
