@@ -12,7 +12,7 @@ ipc_dir=/workdir/ipc
 mkdir -p $fendermint_keys_dir
 
 eth_pk=/tmp/key
-echo $validator_private_key > $eth_pk
+echo $node_private_key > $eth_pk
 trap "rm -f $eth_pk" EXIT
 
 # Validator's key
@@ -31,7 +31,7 @@ fendermint key into-tendermint -s $fendermint_keys_dir/validator.sk -o $cometbft
 mkdir -p $ipc_dir
 cfg=$ipc_dir/config.toml
 echo "keystore_path = '$ipc_dir'" > $cfg
-ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $validator_private_key
+ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $node_private_key
 
 # === Relayer
 if [ $enable_relayer == "true" ]; then

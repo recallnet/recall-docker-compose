@@ -33,20 +33,16 @@ function log-done {
   echo "✅"
 }
 
-function validate-config {
-  run-docker $utils_image -c "cast chain-id --rpc-url $parent_endpoint${parent_endpoint_token:+?token=$parent_endpoint_token}" &>> $log_file
-}
-
 rm -f $log_file
 set +e
 docker rm -f recall-init &> /dev/null
 set -e
 
-log-job-name "Validate config"
-validate-config
-
 log-job-name "Build utils image"
 docker build -t $utils_image --build-arg fendermint_image=$fendermint_image -f $current_dir/utils.Dockerfile $current_dir &>> $log_file
+
+log-job-name "Validate config"
+run-docker -v $repo_dir:/repo:ro $utils_image /repo/scripts/validate-config.sh
 
 log-job-name "Init CometBFT"
 run-docker --user root -v $workdir/cometbft:/cometbft --entrypoint bash $cometbft_image -c "cometbft init --home /cometbft" &>> $log_file
