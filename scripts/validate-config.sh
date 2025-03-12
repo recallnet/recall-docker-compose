@@ -16,9 +16,8 @@ if [ $? != 0 ]; then
 fi
 
 set -e
-subnet_rpr_url=$(echo $cometbft_rpc_servers | sed -e s/api\./evm./ -e s/':443'//)
 address=$(cast wallet address $node_private_key)
-balance=$(cast balance --rpc-url $subnet_rpr_url $address)
+balance=$(cast balance --rpc-url $evm_rpc_url $address)
 if [ $balance == 0 ]; then
   fail "no funds on subnet for the node address $address"
 fi
