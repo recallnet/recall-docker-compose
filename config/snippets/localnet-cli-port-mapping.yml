@@ -1,12 +1,12 @@
 services:
   cometbft:
     ports:
-      - localhost:26657:26657
+      - $localhost_cli_bind_host:26657:26657
 
   ethapi:
     ports:
-      - localhost:8645:8545
+      - $localhost_cli_bind_host:8645:8545
 
   objects:
     ports:
-      - localhost:8001:8001
+      - $localhost_cli_bind_host:8001:8001
