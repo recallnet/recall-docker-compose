@@ -19,7 +19,7 @@ function set_compose_files {
     [ "$enable_recall_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-recall-s3.yml"
   fi
   [ ! -z "$external_default_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/external-default-network.yml"
-  [ ! -z "$ethapi_bind_address" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/ethapi-port-mapping.yml"
+  [ ! -z "$localhost_cli_bind_host" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/localnet-cli-port-mapping.yml"
   [ ! -z "$host_bind_ip" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/port-mapping.yml"
   export COMPOSE_FILE
 }
