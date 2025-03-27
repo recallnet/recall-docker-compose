@@ -42,29 +42,36 @@ function log-done {
 
 rm -f $log_file
 set +e
-docker rm -f recall-init &> /dev/null
+docker rm -f recall-init > /dev/null 2>&1
 set -e
 
 log-job-name "Build utils image"
-docker build -t $utils_image --build-arg fendermint_image=$fendermint_image -f $current_dir/utils.Dockerfile $current_dir &>> $log_file
+if ! docker buildx ls | grep -q "multi-arch-builder"; then
+  docker buildx create --name multi-arch-builder --driver docker-container
+fi
+# Cannot use --load for multi-arch builds, so we build and load for each arch separately.
+docker buildx build --builder=multi-arch-builder --platform linux/amd64 --load -t $utils_image:amd64 --build-arg fendermint_image=$fendermint_image -f $current_dir/utils.Dockerfile $current_dir >> $log_file 2>&1
+docker buildx build --builder=multi-arch-builder --platform linux/arm64 --load -t $utils_image:arm64 --build-arg fendermint_image=$fendermint_image -f $current_dir/utils.Dockerfile $current_dir >> $log_file 2>&1
+
+platform=$(uname -m | sed -e 's/x86_64/amd64/g' -e 's/aarch64/arm64/g')
 
 log-job-name "Validate config"
-run-docker -v $repo_dir:/repo:ro $utils_image /repo/scripts/validate-config.sh
+run-docker -v $repo_dir:/repo:ro $utils_image:$platform /repo/scripts/validate-config.sh
 
 log-job-name "Init CometBFT"
-run-docker --user root -v $workdir/cometbft:/cometbft --entrypoint bash $cometbft_image -c "cometbft init --home /cometbft" &>> $log_file
+run-docker --user root -v $workdir/cometbft:/cometbft --entrypoint bash $cometbft_image -c "cometbft init --home /cometbft" >> $log_file 2>&1
 
 log-job-name "Download genesis file"
 if [ "$cometbft_statesync_enable" == "true" ]; then
-  run-docker -v $workdir/cometbft:/cometbft -v $repo_dir:/repo:ro $utils_image /repo/scripts/download-genesis.sh &>> $log_file
+  run-docker -v $workdir/cometbft:/cometbft -v $repo_dir:/repo:ro $utils_image:$platform /repo/scripts/download-genesis.sh >> $log_file 2>&1
 else
-  run-docker -v $workdir/cometbft:/cometbft -v $repo_dir:/repo:ro --entrypoint bash $fendermint_image /repo/scripts/download-genesis.sh &>> $log_file
+  run-docker -v $workdir/cometbft:/cometbft -v $repo_dir:/repo:ro --entrypoint bash $fendermint_image /repo/scripts/download-genesis.sh >> $log_file 2>&1
 fi
 
 log-job-name "Generate node keys"
-run-docker -v $workdir:/workdir -v $repo_dir:/repo:ro --entrypoint bash $fendermint_image /repo/scripts/set-up-keys.sh &>> $log_file
+run-docker -v $workdir:/workdir -v $repo_dir:/repo:ro --entrypoint bash $fendermint_image /repo/scripts/set-up-keys.sh >> $log_file 2>&1
 
 log-job-name "Write config files"
-run-docker -v $workdir:/workdir -v $repo_dir:/repo:ro $utils_image /repo/scripts/write-configs.sh &>> $log_file
+run-docker -v $workdir:/workdir -v $repo_dir:/repo:ro $utils_image:$platform /repo/scripts/write-configs.sh >> $log_file 2>&1
 
 log-done
