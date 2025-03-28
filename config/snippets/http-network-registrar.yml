@@ -1,5 +1,5 @@
 services:
-  faucet:
+  registrar:
     networks:
       - default
       - external-http
