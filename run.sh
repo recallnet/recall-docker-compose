@@ -9,13 +9,13 @@ source ./scripts/read-config.sh
 function set_compose_files {
   COMPOSE_FILE=./docker-compose.run.yml
   [ "$enable_relayer" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/relayer.yml"
-  [ "$enable_faucet" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/faucet.yml"
+  [ "$enable_registrar" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/registrar.yml"
   [ "$enable_recall_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/recall-s3.yml"
   [ ! -z "$prometheus_external_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/prometheus-network.yml"
   [ ! -z "$prometheus_bind_address" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/prometheus-port-mapping.yml"
   if [ ! -z "$http_external_network" ]; then
     COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network.yml"
-    [ "$enable_faucet" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-faucet.yml"
+    [ "$enable_registrar" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-registrar.yml"
     [ "$enable_recall_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-recall-s3.yml"
   fi
   [ ! -z "$external_default_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/external-default-network.yml"

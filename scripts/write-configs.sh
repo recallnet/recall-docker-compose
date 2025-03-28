@@ -62,10 +62,10 @@ if [ $enable_relayer == "true" ]; then
   echo '[{"targets":["relayer:9184"]}]' > $prom_targets_dir/relayer.json
 fi
 
-if [ $enable_faucet == "true" ]; then
+if [ $enable_registrar == "true" ]; then
   export recall_exporter_subnet_faucet_contract_address=$subnet_faucet_contract_address
   # Uncomment when registrar implements prometheus metrics.
-  # echo '[{"targets":["faucet:9090"]}]' > $prom_targets_dir/faucet.json
+  # echo '[{"targets":["registrar:9090"]}]' > $prom_targets_dir/registrar.json
 fi
 
 if [ $enable_recall_s3 == "true" ]; then
@@ -89,5 +89,4 @@ write_env ethapi.env
 write_env objects.env
 write_env recall-exporter.env
 if [ $enable_recall_s3 == "true" ]; then write_env recall-s3.env; fi
-if [ $enable_faucet == "true" ]; then write_env faucet.env; fi
-
+if [ $enable_registrar == "true" ]; then write_env registrar.env; fi
