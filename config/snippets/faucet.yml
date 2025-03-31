@@ -1,8 +1,0 @@
-services:
-  faucet:
-    image: $faucet_image
-    restart: always
-    env_file:
-      - $workdir/generated/faucet.env
-    depends_on:
-      - ethapi

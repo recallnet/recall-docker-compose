@@ -1,0 +1,8 @@
+services:
+  registrar:
+    image: $registrar_image
+    restart: always
+    env_file:
+      - $workdir/generated/registrar.env
+    depends_on:
+      - ethapi
