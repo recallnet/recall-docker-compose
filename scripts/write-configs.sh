@@ -59,17 +59,16 @@ if [ $enable_relayer == "true" ]; then
   export keystore_path=/relayer/ipc
   envsubst < /repo/config/services/run-relayer.sh > /workdir/relayer/run.sh
   envsubst < /repo/config/services/ipc.config.toml > /workdir/relayer/ipc/config.toml
-  echo '[{"targets":["relayer:9184"]}]' > $prom_targets_dir/relayer.json
+  echo '[{"targets":["'${project_name}'-relayer-1:9184"]}]' > $prom_targets_dir/relayer.json
 fi
 
 if [ $enable_registrar == "true" ]; then
   export recall_exporter_subnet_faucet_contract_address=$subnet_faucet_contract_address
-  # Uncomment when registrar implements prometheus metrics.
-  # echo '[{"targets":["registrar:9090"]}]' > $prom_targets_dir/registrar.json
+  echo '[{"targets":["'${project_name}'-registrar-1:9090"]}]' > $prom_targets_dir/registrar.json
 fi
 
 if [ $enable_recall_s3 == "true" ]; then
-  echo '[{"targets":["recall-s3:9090"]}]' > $prom_targets_dir/recall-s3.json
+  echo '[{"targets":["'${project_name}'-recall-s3-1:9090"]}]' > $prom_targets_dir/recall-s3.json
 fi
 
 # === Generated
