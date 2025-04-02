@@ -10,7 +10,7 @@ To run a Recall validator Node, the following hardware is strongly recommended:
 |-------------------|----------|-----------|
 | CPU cores         | 8        | 8         |
 | Memory            | 32 (GB)  | 32 (GB)   |
-| Disk space <sup>(1)</sup>    | 32 (TB)  | 480 (TB)  |
+| Disk space <sup>(1)</sup>    | 50 (TB)  | 512 (TB)  |
 | Network bandwidth | 1 GB/s   | 1 GB/s    |
 | Public IP Address | 1        | 1         |
 
