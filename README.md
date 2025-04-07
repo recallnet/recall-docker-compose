@@ -35,6 +35,12 @@ Consider adjusting the following options:
 * `datadir` that contains the uploaded user blobs, default `./workdir/data`
 * `prometheus_external_network` - external docker network that prometheus will join. This can be used to scrape metrics from prometheus in another prometheus instance in an external network.
 
+### Firewall
+Make sure the ports `external_*_ports` defined in `config/node-default.env` are open on the host machine:
+* `external_cometbft_port` - CometBFT p2p port (TCP)
+* `external_fendermint_port` - Fendermint p2p port (TCP)
+* `external_iroh_port` - Iroh p2p port (UDP)
+
 ## Joining network as a validator
 1. Ask for whitelisting in `TODO` telegram channel.
 2. The recall team will whitelist your address and let you know the required amount in RECALL tokens you can use as collateral to join the subnet as a validator.
