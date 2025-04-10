@@ -59,3 +59,16 @@ There is a prometheus instance that scrapes metrics from all recall node compoen
 You can deploy an additional prometheus server and scrape metrics from the node prometheus.
 For details see [prometheus docs on federation](https://prometheus.io/docs/prometheus/latest/federation/).
 If your prometheus server is running in a docker container, you can set `prometheus_external_network` to make prometheus container to join an external network.
+
+## Testnet Node Reset
+To reset a testnet node, you have to run the following steps:
+1. Stop the node: `./run.sh stop`
+2. Remove the node data: `rm -r ./workdir` and eventually the `datadir` if it is located outside of `workdir`.
+3. Pull the latest changes: `git pull`
+4. Get some funds from the faucet: `https://faucet.recall.network/`
+5. Initialize the node: `./run.sh init`
+6. Start the node: `./run.sh up -d`
+
+### Join Subnet
+1. Reach out to the Recall team to get your node address approved.
+2. Join the subnet: `./run.sh join-subnet 3` (3 is just an example, it is the collateral in full RECALL units).
