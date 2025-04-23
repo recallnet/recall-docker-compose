@@ -15,7 +15,7 @@ services:
     restart: always
     volumes:
       - $workdir/fendermint:/data
-      - $datadir/iroh-data:/iroh-data
+      - $datadir/iroh-fendermint:/iroh-data
     env_file:
       - $workdir/generated/fendermint.env
 
@@ -36,6 +36,7 @@ services:
     restart: always
     volumes:
       - $workdir/fendermint:/data
+      - $datadir/iroh-objects:/iroh-data
     env_file:
       - $workdir/generated/objects.env
     depends_on:
