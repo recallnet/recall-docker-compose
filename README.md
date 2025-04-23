@@ -51,7 +51,6 @@ Make sure the ports `external_*_ports` defined in `config/node-default.env` are 
 * [Fendermint](https://github.com/recallnet/ipc/blob/main/docs/fendermint), a specialized ABCI++ interface to FEVM/FVM
 * Ethereum RPC, a standard endpoint for ETH API access (provided by fendermint).
 * Blob API, the Recall endpoint for data blob storage and retrieval (provided by fendermint)
-* [Iroh](https://github.com/n0-computer/iroh), provides data synchronization between nodes
 * [recall-exporter](https://github.com/recallnet/recall-exporter), scrapes subnet specific metrics
 
 ## Monitoring
