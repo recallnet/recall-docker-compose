@@ -1,0 +1,22 @@
+networks:
+  anvil:
+    name: $anvil_network
+    external: true
+
+services:
+  cometbft:
+    networks:
+      - default
+      - anvil
+  fendermint:
+    networks:
+      - default
+      - anvil
+  ethapi:
+    networks:
+      - default
+      - anvil
+  objects:
+    networks:
+      - default
+      - anvil
