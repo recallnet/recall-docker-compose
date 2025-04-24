@@ -16,8 +16,8 @@ logged_done="true"
 function run-docker {
   set +u
   flags=""
-  if [ ! -z "$anvil_network" ]; then
-    flags="--network $anvil_network"
+  if [ ! -z "$localnet_network" ]; then
+    flags="--network $localnet_network"
   fi
   set -u
 

@@ -18,7 +18,10 @@ function set_compose_files {
     [ "$enable_registrar" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-registrar.yml"
     [ "$enable_recall_s3" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/http-network-recall-s3.yml"
   fi
-  [ ! -z "$anvil_network" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/anvil-network.yml"
+  if [ ! -z "$localnet_network" ]; then
+    COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/localnet-network.yml"
+    [ "$enable_relayer" == "true" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/localnet-network-relayer.yml"
+  fi
   [ ! -z "$localhost_cli_bind_host" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/localnet-cli-port-mapping.yml"
   [ ! -z "$host_bind_ip" ] && COMPOSE_FILE="$COMPOSE_FILE:./config/snippets/port-mapping.yml"
   export COMPOSE_FILE
