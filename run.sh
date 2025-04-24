@@ -83,6 +83,6 @@ case ${cmd:-"none"} in
 
   *)
     set_compose_files
-    docker compose "$@"
+    docker compose --env-file $workdir/generated/service-ips.env "$@"
     ;;
 esac

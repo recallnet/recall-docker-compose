@@ -9,4 +9,6 @@ services:
       - ./config/network-${network_name}.env
     depends_on:
       - fendermint
-
+    networks:
+      default:
+        ipv4_address: $relayer_ip

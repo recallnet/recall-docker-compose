@@ -6,3 +6,6 @@ services:
       - $workdir/generated/registrar.env
     depends_on:
       - ethapi
+    networks:
+      default:
+        ipv4_address: $registrar_ip

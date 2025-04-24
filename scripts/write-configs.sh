@@ -83,6 +83,10 @@ function write_env {
   )
 }
 set -a
+subnet_prefix=$(echo $docker_network_subnet | sed -e 's|\.[0-9]*/.*||')
+write_env service-ips.env
+source /workdir/generated/service-ips.env
+
 write_env fendermint.env
 write_env ethapi.env
 write_env objects.env
