@@ -3,7 +3,7 @@ name: $project_name
 services:
   cometbft:
     image: $cometbft_image
-    command: run --home /cometbft
+    command: run --home /cometbft --log_level=consensus:error,state:error,txindex:error
     restart: always
     volumes:
       - $workdir/cometbft:/cometbft
