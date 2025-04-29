@@ -3,11 +3,14 @@ name: $project_name
 services:
   cometbft:
     image: $cometbft_image
-    command: run --home /cometbft
+    command: run --home /cometbft --log_level=consensus:error,state:error,txindex:error
     restart: always
     volumes:
       - $workdir/cometbft:/cometbft
     user: root
+    networks:
+      default:
+        ipv4_address: $cometbft_ip
 
   fendermint:
     image: $fendermint_image
@@ -15,8 +18,12 @@ services:
     restart: always
     volumes:
       - $workdir/fendermint:/data
+      - $datadir/iroh-fendermint:/iroh-data
     env_file:
       - $workdir/generated/fendermint.env
+    networks:
+      default:
+        ipv4_address: $fendermint_ip
 
   ethapi:
     image: $fendermint_image
@@ -28,21 +35,9 @@ services:
       - $workdir/generated/ethapi.env
     depends_on:
       - fendermint
-
-  iroh:
-    image: $iroh_image
-    command: >
-      --rpc-addr 0.0.0.0:4919
-      --metrics-addr 0.0.0.0:9090
-      --config /etc/iroh/config.toml
-      start
-    restart: always
-    volumes:
-      - $datadir:/data
-      - ./config/services/iroh.config.toml:/etc/iroh/config.toml
-    environment:
-      IROH_DATA_DIR: /data
-      IROH_CONFIG_DIR: /etc/iroh
+    networks:
+      default:
+        ipv4_address: $ethapi_ip
 
   objects:
     image: $fendermint_image
@@ -50,12 +45,15 @@ services:
     restart: always
     volumes:
       - $workdir/fendermint:/data
+      - $datadir/iroh-objects:/iroh-data
     env_file:
       - $workdir/generated/objects.env
     depends_on:
       - fendermint
       - cometbft
-      - iroh
+    networks:
+      default:
+        ipv4_address: $objects_ip
 
   recall-exporter:
     image: $recall_exporter_image
@@ -64,6 +62,9 @@ services:
       - $workdir/generated/recall-exporter.env
     depends_on:
       - ethapi
+    networks:
+      default:
+        ipv4_address: $recall_exporter_ip
 
   prometheus:
     image: $prometheus_image
@@ -74,7 +75,13 @@ services:
     command: >
       --config.file=/etc/prometheus/config.yml
       --storage.tsdb.retention.time=10m
+    networks:
+      default:
+        ipv4_address: $prometheus_ip
 
 networks:
   default:
     name: $project_name
+    ipam:
+      config:
+        - subnet: $docker_network_subnet

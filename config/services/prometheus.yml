@@ -8,7 +8,6 @@ scrape_configs:
           - "${project_name}-recall-exporter-1:9010"
           - "${project_name}-cometbft-1:26660"
           - "${project_name}-fendermint-1:9184"
-          - "${project_name}-iroh-1:9090"
           - "${project_name}-objects-1:9186"
           - "${project_name}-ethapi-1:9185"
     file_sd_configs:

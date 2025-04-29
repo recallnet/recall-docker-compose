@@ -1,4 +1,0 @@
-networks:
-  default:
-    name: $external_default_network
-    external: true

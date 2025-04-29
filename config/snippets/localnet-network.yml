@@ -1,0 +1,26 @@
+networks:
+  localnet:
+    name: $localnet_network
+    external: true
+
+services:
+  cometbft:
+    networks:
+      - default
+      - localnet
+  fendermint:
+    networks:
+      - default
+      - localnet
+  ethapi:
+    networks:
+      - default
+      - localnet
+  objects:
+    networks:
+      - default
+      - localnet
+  recall-exporter:
+    networks:
+      - default
+      - localnet

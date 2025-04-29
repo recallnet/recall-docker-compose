@@ -6,7 +6,8 @@ services:
   fendermint:
     ports:
       - $host_bind_ip:$external_fendermint_port:26655
+      - $host_bind_ip:$external_fendermint_iroh_port:11204/udp
 
-  iroh:
+  objects:
     ports:
-      - $host_bind_ip:$external_iroh_port:11204/udp
+      - $host_bind_ip:$external_objects_iroh_port:11204/udp

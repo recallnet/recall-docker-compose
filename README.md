@@ -39,7 +39,8 @@ Consider adjusting the following options:
 Make sure the ports `external_*_ports` defined in `config/node-default.env` are open on the host machine:
 * `external_cometbft_port` - CometBFT p2p port (TCP)
 * `external_fendermint_port` - Fendermint p2p port (TCP)
-* `external_iroh_port` - Iroh p2p port (UDP)
+* `external_fendermint_iroh_port` - Fendermint Iroh p2p port (UDP)
+* `external_objects_iroh_port` - Objects Iroh p2p port (UDP)
 
 ## Joining network as a validator
 1. Ask for whitelisting in `TODO` telegram channel.
@@ -51,7 +52,6 @@ Make sure the ports `external_*_ports` defined in `config/node-default.env` are 
 * [Fendermint](https://github.com/recallnet/ipc/blob/main/docs/fendermint), a specialized ABCI++ interface to FEVM/FVM
 * Ethereum RPC, a standard endpoint for ETH API access (provided by fendermint).
 * Blob API, the Recall endpoint for data blob storage and retrieval (provided by fendermint)
-* [Iroh](https://github.com/n0-computer/iroh), provides data synchronization between nodes
 * [recall-exporter](https://github.com/recallnet/recall-exporter), scrapes subnet specific metrics
 
 ## Monitoring

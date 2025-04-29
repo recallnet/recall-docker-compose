@@ -6,3 +6,6 @@ services:
     depends_on:
       - cometbft
       - objects
+    networks:
+      default:
+        ipv4_address: $recall_s3_ip

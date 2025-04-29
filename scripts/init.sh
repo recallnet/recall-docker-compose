@@ -16,8 +16,8 @@ logged_done="true"
 function run-docker {
   set +u
   flags=""
-  if [ ! -z "$external_default_network" ]; then
-    flags="--network $external_default_network"
+  if [ ! -z "$localnet_network" ]; then
+    flags="--network $localnet_network"
   fi
   set -u
 
