@@ -23,7 +23,9 @@ blob_manager = "0x27594F8412bA08278b15b55C6347605Ee3b2020C"
 
 [endpoints]
 seed_node_api_host = "api.v016.node-0.testnet.recall.network"
-cometbft_rpc_servers = "https://api.v016.node-0.testnet.recall.network:443"
+cometbft_rpc_servers = [
+  "https://api.v016.node-0.testnet.recall.network:443",
+]
 cometbft_persistent_peers = [
     "a137f88f9f4292181e657e49529825b215c59f91@api.v016.node-0.testnet.recall.network:25300",
     "7652105b6b1e7485aabdde7c26c708af2326bf2a@api.v016.node-1.testnet.recall.network:25300",

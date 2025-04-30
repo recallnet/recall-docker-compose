@@ -11,7 +11,10 @@ def main [
 
   let workdir = (get-workdir $repo_dir $cfg)
   let args = $"--build-arg fendermint_image=($cfg.images.fendermint) --build-arg cometbft_image=($cfg.images.cometbft)"
-  let mounts = $"-v ($repo_dir):/repo -v ($workdir):/workdir"
+  let mounts = [
+    -v $"($repo_dir):/repo"
+    -v $"($workdir):/workdir"
+  ] | str join " "
   [
     "set -eu"
     $"docker build -q -t ($init_image) ($args) -f ($scripts_dir)/init.Dockerfile ($scripts_dir) > /dev/null"
