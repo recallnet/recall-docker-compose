@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -exuo pipefail
 
 current_dir=$(dirname $0)
 repo_dir=$(cd $current_dir/..; pwd)
+
+docker build -t recall-nushell -f $current_dir/nushell.Dockerfile $current_dir
+
+bash <(docker run --rm -it -v $repo_dir:/repo recall-nushell /repo/scripts/bootstrap.nu $repo_dir)
+
+
+exit 2
 source $current_dir/read-config.sh
 
 # set -x
