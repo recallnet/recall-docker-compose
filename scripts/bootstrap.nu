@@ -14,7 +14,7 @@ def main [
   let mounts = $"-v ($repo_dir):/repo -v ($workdir):/workdir"
   [
     "set -eu"
-    $"docker build -t ($init_image) ($args) -f ($scripts_dir)/init.Dockerfile ($scripts_dir)"
+    $"docker build -q -t ($init_image) ($args) -f ($scripts_dir)/init.Dockerfile ($scripts_dir) > /dev/null"
     $"docker run --rm -it ($mounts) ($init_image) /repo/scripts/init.nu"
   ] | str join "; "
 }
