@@ -48,8 +48,50 @@ def validate-config [] {
   }
 }
 
+def set-up-keys [] {
+  let cometbft_dir = "/workdir/cometbft"
+  let fendermint_dir = "/workdir/fendermint"
+  let relayer_dir = "/workdir/relayer"
+  let fendermint_keys_dir = $"($fendermint_dir)/keys"
+  let ipc_dir = "/workdir/ipc"
+
+  # === Fendermint
+  mkdir $fendermint_keys_dir
+
+  let eth_pk = "/tmp/key"
+  $env.node_config.node_private_key | save -f $eth_pk
+
+  # Validator's key
+  fendermint key from-eth -s $eth_pk -n validator -o $fendermint_keys_dir
+  rm $eth_pk
+
+  # Network key
+  if not ($"($fendermint_keys_dir)/network.pk" | path exists) {
+    fendermint key gen --name network --out-dir $fendermint_keys_dir
+  }
+
+  # === CometBFT
+  fendermint key into-tendermint -s $"($fendermint_keys_dir)/validator.sk" -o $"($cometbft_dir)/config/priv_validator_key.json"
+
+  # === ipc-cli
+  mkdir $ipc_dir
+  let cfg = $"($ipc_dir)/config.toml"
+  {keystore_path: $ipc_dir} | save -f $cfg
+
+  ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $env.node_config.node_private_key o> /dev/null
+
+  # === Relayer
+  if $env.node_config.relayer.enable {
+    mkdir $"($relayer_dir)/ipc"
+    let cfg = $"($relayer_dir)/ipc/config.toml"
+    {keystore_path: $"($relayer_dir)/ipc"} | save -f $cfg
+    ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $env.node_config.node_private_key o> /dev/null
+  }
+}
+
 validate-config
 step "Init CometBFT" { cometbft init --home /workdir/cometbft }
 step "Download genesis" { genesis download }
+step "Set up node keys" { set-up-keys }
 
 # $env.node_config | to yaml

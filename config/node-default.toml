@@ -52,8 +52,8 @@ enable = false
 # Optional unless enable_relayer = true
 checkpoint_interval_sec = 600
 max_parallelism = 1
-# Optional unless enable_relayer = true
-# private_key =
+# Optional unless relayer.enable = true
+# private_key = ""
 
 [recall_s3]
 # Set to true to run recall-s3 service
