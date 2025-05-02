@@ -14,7 +14,7 @@ builtin_actors_bundle = "bundle.car"
 # Custom actor bundle CAR file.
 custom_actors_bundle = "custom_actors_bundle.car"
 # Where to reach CometBFT for queries or broadcasting transactions.
-tendermint_rpc_url = "http://${project_name}-cometbft-1:26657"
+tendermint_rpc_url = "dynamically-configured"
 # Block height where we should gracefully stop the node to perform maintenance or
 # with planning for an upcoming coordinated upgrade. Set to 0 to never halt.
 halt_height = 0
@@ -90,7 +90,7 @@ enabled = true
 # How often to attempt to export snapshots in terms of block height.
 # With 1-2s block time, we can aim for 8h snapshots and cover the last 24h keeping the last 3.
 # The Filecoin Calibration net does not allow longer lookups than 16h, so we should have a snapshot within that time.
-block_interval = $fendermint_snapshot_block_interval
+block_interval = -1 # dynamically configured
 # Number of snapshots to keep before purging old ones.
 # Keep the last 2-3 snapshots around as recommended by CometBFT docs.
 hist_size = 3
@@ -301,7 +301,7 @@ rate_limit_period = 0
 # IPC related configuration parameters
 [ipc]
 # Default subnet ID, which basically means IPC is disabled.
-subnet_id = "$subnet_id"
+subnet_id = "dynamically-configured"
 # Voting interval about things such as the top-down finality, in seconds.
 # It's limited to avoid GossipSub throttling or banning the node for over production.
 # The minimum is 1 seconds which is about the minimum target block time as well;
@@ -332,10 +332,9 @@ vote_timeout = 60
 # push_chain_meta = true
 
 [ipc.topdown]
-parent_http_endpoint = "$parent_endpoint"
-$fendermint_parent_endpoint_token
-parent_gateway = "$parent_gateway_address"
-parent_registry = "$parent_registry_address"
+parent_http_endpoint = "dynamically-configured"
+parent_gateway = "dynamically-configured"
+parent_registry = "dynamically-configured"
 chain_head_delay = 10
 exponential_back_off = 5
 exponential_retry_limit = 5

@@ -33,8 +33,6 @@ export def write-ipc-cli [] {
 }
 
 export def write-cometbft [] {
-  let cfg = (open "/repo/config/services/cometbft.config.toml")
-
   let c = $env.node_config
 
   def statesync [] {
@@ -71,7 +69,7 @@ export def write-cometbft [] {
     }
   }
 
-  $cfg | merge deep {
+  open "/repo/config/services/cometbft.config.toml" | merge deep {
     proxy_app: $"tcp://($c.project_name)-fendermint-1:26658"
     moniker: $c.node_name
     p2p: {
@@ -82,10 +80,27 @@ export def write-cometbft [] {
   } | save -f /workdir/cometbft/config/config.toml
 }
 
+export def write-fendermint [] {
+  mkdir "/workdir/fendermint/config"
+  let c = $env.node_config
 
-# # Fendermint
-# mkdir -p /workdir/fendermint/config
-# envsubst < /repo/config/services/fendermint.config.toml > /workdir/fendermint/config/default.toml
+  open "/repo/config/services/fendermint.config.toml" | merge deep {
+    tendermint_rpc_url: $"http://($c.project_name)-cometbft-1:26657"
+    snapshots: {
+      block_interval: $c.services.fendermint_snapshot_block_interval
+    }
+    ipc: {
+      subnet_id: $c.network.subnet.subnet_id
+      topdown: ({
+        parent_http_endpoint: $c.parent_endpoint.url
+        parent_gateway: $c.network.parent_chain.addresses.gateway
+        parent_registry: $c.network.parent_chain.addresses.registry
+      } | merge (if ($c.parent_endpoint.token? | is-empty) {{}} else {{
+        parent_http_auth_token: $c.parent_endpoint.token
+      }}))
+    }
+  } | save -f "/workdir/fendermint/config/default.toml"
+}
 
 # # Prometheus
 # prom_targets_dir=/workdir/prometheus/etc/targets

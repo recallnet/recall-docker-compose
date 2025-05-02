@@ -97,3 +97,4 @@ step "Set up node keys" { set-up-keys }
 
 step "Write ipc-cli config" { service-configs write-ipc-cli }
 step "Write CometBFT config" { service-configs write-cometbft  }
+step "Write fendermint config" { service-configs write-fendermint }
