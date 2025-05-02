@@ -102,15 +102,64 @@ export def write-fendermint [] {
   } | save -f "/workdir/fendermint/config/default.toml"
 }
 
-# # Prometheus
-# prom_targets_dir=/workdir/prometheus/etc/targets
-# rm -rf $prom_targets_dir
-# rm -rf /workdir/prometheus/etc/rules
-# mkdir -p $prom_targets_dir
-# mkdir -p /workdir/prometheus/etc/rules
-# mkdir -p /workdir/prometheus/data
-# chown nobody /workdir/prometheus/data
-# envsubst < /repo/config/services/prometheus.yml > /workdir/prometheus/etc/config.yml
+const prom_targets_dir = "/workdir/prometheus/etc/targets"
+export def write-prometheus [] {
+  rm -rf $prom_targets_dir
+  rm -rf "/workdir/prometheus/etc/rules"
+  mkdir $prom_targets_dir
+  mkdir "/workdir/prometheus/etc/rules"
+  mkdir "/workdir/prometheus/data"
+  chown nobody /workdir/prometheus/data
+
+  let c = $env.node_config
+  {
+    global: {
+      scrape_interval: "15s"
+    }
+    scrape_configs: [
+      {
+        job_name: "node-components"
+        static_configs: [
+          {
+            targets: [
+              $"($c.project_name)-recall-exporter-1:9010"
+              $"($c.project_name)-cometbft-1:26660"
+              $"($c.project_name)-fendermint-1:9184"
+              $"($c.project_name)-objects-1:9186"
+              $"($c.project_name)-ethapi-1:9185"
+            ]
+          }
+        ]
+        file_sd_configs: [
+          {
+            files: [
+              "/etc/prometheus/targets/*.json"
+              "/etc/prometheus/targets/*.yml"
+            ]
+          }
+        ]
+        relabel_configs: [
+          {
+            action: "replace"
+            target_label: "subnet_id"
+            replacement: $c.network.subnet.subnet_id
+          }
+          {
+            action: "replace"
+            target_label: "node_name"
+            replacement: $c.node_name
+          }
+          {
+            action: "replace",
+            target_label: "network_name"
+            replacement: $c.network_name
+          }
+        ]
+      }
+    ]
+    rule_files: [ "/etc/prometheus/rules/*.yml" ]
+  } | save -f "/workdir/prometheus/etc/config.yml"
+}
 
 # # Relayer
 # if [ $enable_relayer == "true" ]; then
