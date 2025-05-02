@@ -1,6 +1,7 @@
 #!/usr/bin/env nu
 
 use genesis.nu
+use service-configs.nu
 
 def read-config [] {
   let config = open "/repo/config/node-default.toml" |
@@ -94,4 +95,4 @@ step "Init CometBFT" { cometbft init --home /workdir/cometbft }
 step "Download genesis" { genesis download }
 step "Set up node keys" { set-up-keys }
 
-# $env.node_config | to yaml
+step "Write ipc-cli config" { service-configs write-ipc-cli }
