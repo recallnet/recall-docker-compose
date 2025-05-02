@@ -32,38 +32,55 @@ export def write-ipc-cli [] {
   } | save -f "/workdir/ipc/config.toml"
 }
 
-# # === parent endpoint token
-# set +u
-# if [ ! -z "$parent_endpoint_token" ]; then
-#   export recall_exporter_parent_endpoint_token="$parent_endpoint_token"
-#   export ipc_config_parent_endpoint_token="auth_token = '$parent_endpoint_token'"
-# fi
-# set -u
+export def write-cometbft [] {
+  let cfg = (open "/repo/config/services/cometbft.config.toml")
 
-# # ipc-cli
-# export validator_address=$(jq -r '.[].address' < /workdir/ipc/evm_keystore.json)
-# export keystore_path="/fendermint/.ipc"
-# envsubst < /repo/config/services/ipc.config.toml > /workdir/ipc/config.toml
+  let c = $env.node_config
 
-# # CometBFT
-# if [ "$cometbft_statesync_enable" == "true" ]; then
-#   first_server=$(echo $cometbft_rpc_servers | sed -e s/',.*'//)
-#   last_block=$(curl -s $first_server/abci_info | jq -r '.result.response.last_block_height')
-#   if [ $last_block -gt $fendermint_snapshot_block_interval ]; then
-#     export trusted_block_height=$(($last_block - $fendermint_snapshot_block_interval))
-#     export trusted_block_hash=$(curl -s https://$seed_node_api_host/block?height=$trusted_block_height | jq -r '.result.block_id.hash')
-#   else
-#     export cometbft_statesync_enable="false"
-#     export trusted_block_height=0
-#   fi
-# else
-#   export trusted_block_height=0
-# fi
-# if [ ! -z "$advertised_external_ip" ]; then
-#   export cometbft_external_address="$advertised_external_ip:$external_cometbft_port"
-# fi
+  def statesync [] {
+    # CometBFT requires at least 2 RPC servers. So if there is just one, we write it twice.
+    def rpc-servers [] {
+      let srv = if ($c.network.endpoints.cometbft_rpc_servers | length) > 1 {
+        $c.network.endpoints.cometbft_rpc_servers
+      } else {
+        let x = ($c.network.endpoints.cometbft_rpc_servers | first)
+        [$x $x]
+      }
+      $srv | str join ","
+    }
 
-# envsubst < /repo/config/services/cometbft.config.toml > /workdir/cometbft/config/config.toml
+    let disabled = { enable: false }
+
+    if $c.services.cometbft_statesync_enable {
+      let srv = ($c.network.endpoints.cometbft_rpc_servers | first)
+      let last_block = (http get $"($srv)/abci_info" | get result.response.last_block_height | into int)
+      if $last_block >= $c.services.fendermint_snapshot_block_interval {
+        let trust_height = ($last_block - $c.services.fendermint_snapshot_block_interval)
+        {
+          enable: true
+          rpc_servers: (rpc-servers)
+          trust_height: $trust_height
+          trust_hash: (http get $"($srv)/block?height=($trust_height)" | get result.block_id.hash)
+        }
+      } else {
+        # There are no snapshots yet.
+        $disabled
+      }
+    } else {
+      $disabled
+    }
+  }
+
+  $cfg | merge deep {
+    proxy_app: $"tcp://($c.project_name)-fendermint-1:26658"
+    moniker: $c.node_name
+    p2p: {
+      external_address: (if ($c.networking.advertised_external_ip? | is-empty) {""} else {$"($c.networking.advertised_external_ip):($c.networking.external_ports.cometbft)"})
+      persistent_peers: ($c.network.endpoints.cometbft_persistent_peers | str join ",")
+    }
+    statesync: (statesync)
+  } | save -f /workdir/cometbft/config/config.toml
+}
 
 
 # # Fendermint

@@ -96,3 +96,4 @@ step "Download genesis" { genesis download }
 step "Set up node keys" { set-up-keys }
 
 step "Write ipc-cli config" { service-configs write-ipc-cli }
+step "Write CometBFT config" { service-configs write-cometbft  }
