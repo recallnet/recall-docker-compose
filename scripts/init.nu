@@ -88,6 +88,9 @@ step "Configure ipc-cli" { service-configs write-ipc-cli }
 if $c.relayer.enable {
   step "Configure relayer" { service-configs write-relayer }
 }
+if $c.recall_s3.enable {
+  step "Configure recall-s3" { service-configs write-recall-s3 }
+}
 if $c.registrar.enable {
   step "Configure registrar" { service-configs write-registrar }
 }

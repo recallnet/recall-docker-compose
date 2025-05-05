@@ -268,9 +268,34 @@ export def write-registrar [] {
   }] | save -f $"($prom_targets_dir)/registrar.json"
 }
 
-# if [ $enable_recall_s3 == "true" ]; then
-#   echo '[{"targets":["'${project_name}'-recall-s3-1:9090"]}]' > $prom_targets_dir/recall-s3.json
-# fi
+export def write-recall-s3 [] {
+  let c = $env.node_config
+  write-docker-service "recall-s3" {
+    image: $c.images.recall_s3
+    depends_on: [
+      "cometbft"
+      "objects"
+    ]
+    environment: {
+      HOST: 0.0.0.0
+      PORT: "8014"
+      ACCESS_KEY: $c.recall_s3.access_key
+      SECRET_KEY: $c.recall_s3.secret_key
+      DOMAIN_NAME: $c.recall_s3.domain
+      METRICS_LISTEN_ADDRESS: "0.0.0.0:9090"
+      RUST_LOG: recall_s3=info
+      NETWORK: custom
+      SUBNET_ID: $c.network.subnet.subnet_id
+      RPC_URL: $"http://($c.project_name)-cometbft-1:26657"
+      OBJECT_API_URL: $"http://($c.project_name)-objects-1:8001"
+    }
+  }
+
+  # metrics
+  [{
+    targets: [ $"($c.project_name)-recall-s3-1:9090"]
+  }] | save -f $"($prom_targets_dir)/recall-s3.json"
+}
 
 # # === Generated
 # # It's using some environment variables set above!!!

@@ -56,10 +56,10 @@ enable = false
 # Set to true to run recall-s3 service
 enable = false
 # Optional unless enable_recall_s3 = true
-# access_key =
-# secret_key =
+# access_key = ""
+# secret_key = ""
 # Public recall-s3 domain
-# domain =
+# domain = ""
 
 
 [registrar]
