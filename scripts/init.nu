@@ -49,42 +49,14 @@ def validate-config [] {
   }
 }
 
-def set-up-keys [] {
-  let cometbft_dir = "/workdir/cometbft"
-  let fendermint_dir = "/workdir/fendermint"
-  let fendermint_keys_dir = $"($fendermint_dir)/keys"
-  let ipc_dir = "/workdir/ipc"
-
-  # === Fendermint
-  mkdir $fendermint_keys_dir
-
-  let eth_pk = "/tmp/key"
-  $env.node_config.node_private_key | save -f $eth_pk
-
-  # Validator's key
-  fendermint key from-eth -s $eth_pk -n validator -o $fendermint_keys_dir
-  rm $eth_pk
-
-  # Network key
-  if not ($"($fendermint_keys_dir)/network.pk" | path exists) {
-    fendermint key gen --name network --out-dir $fendermint_keys_dir
-  }
-
-  # === CometBFT
-  fendermint key into-tendermint -s $"($fendermint_keys_dir)/validator.sk" -o $"($cometbft_dir)/config/priv_validator_key.json"
-
-}
-
 let c = $env.node_config
 
-# validate-config
-# step "Init CometBFT" { cometbft init --home /workdir/cometbft }
-# step "Download genesis" { genesis download }
-# step "Set up node keys" { set-up-keys }
+validate-config
 step "Configure ipc-cli" { service-configs configure-ipc-cli }
-# step "Configure CometBFT" { service-configs configure-cometbft  }
-# step "Configure fendermint" { service-configs configure-fendermint }
-# step "Configure prometheus" { service-configs configure-prometheus }
+step "Configure fendermint" { service-configs configure-fendermint }
+step "Configure CometBFT" { service-configs configure-cometbft }
+step "Download genesis" { genesis download }
+step "Configure prometheus" { service-configs configure-prometheus }
 if $c.relayer.enable {
   step "Configure relayer" { service-configs configure-relayer }
 }

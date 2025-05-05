@@ -39,10 +39,6 @@ def service-ip [service: string] {
 
 def ipc-config [keystore_path] {
   let net = $env.node_config.network
-  let patch = if ($env.node_config.parent_endpoint.token? | is-empty) {{}} else {
-    auth_token: $env.node_config.parent_endpoint.token
-  }
-
   {
     keystore_path: $keystore_path
     subnets: [
@@ -53,7 +49,7 @@ def ipc-config [keystore_path] {
           provider_http: $env.node_config.parent_endpoint.url
           gateway_addr: $net.parent_chain.addresses.gateway
           registry_addr: $net.parent_chain.addresses.registry
-        } | merge $patch)
+        } | set-field auth_token $env.node_config.parent_endpoint.token?)
       }
       {
         id: $net.subnet.subnet_id
@@ -77,6 +73,16 @@ def write-ipc-key [dir, private_key] {
     address: $addr
     private_key: ($private_key | str replace "0x" "")
   }] | save -f ($dir | path join "evm_keystore.json")
+}
+
+# Updates the input record if value is not empty and applies the transform if not empty.
+def set-field [path: cell-path, value, transform?: closure] {
+  if ($value | is-empty) {
+    $in
+  } else {
+    let val = (if ($transform | is-empty) { $value } else { do $transform })
+    $in | upsert $path $val
+  }
 }
 
 export def configure-ipc-cli [] {
@@ -122,6 +128,9 @@ export def configure-cometbft [] {
     }
   }
 
+  cometbft init --home /workdir/cometbft o> /dev/null
+  fendermint key into-tendermint -s "/workdir/fendermint/keys/validator.sk" -o "/workdir/cometbft/config/priv_validator_key.json"
+
   open "/repo/config/services/cometbft.config.toml" | merge deep {
     proxy_app: $"tcp://($c.project_name)-fendermint-1:26658"
     moniker: $c.node_name
@@ -131,11 +140,35 @@ export def configure-cometbft [] {
     }
     statesync: (statesync)
   } | save -f /workdir/cometbft/config/config.toml
+
+  write-docker-service "cometbft" {
+    image: $c.images.cometbft
+    command: "run --home /cometbft --log_level=consensus:error,state:error,txindex:error"
+    user: "root"
+    volumes: [ "./cometbft:/cometbft" ]
+  }
 }
 
 export def configure-fendermint [] {
   mkdir "/workdir/fendermint/config"
   let c = $env.node_config
+
+  # Create keys
+  do {
+    let fendermint_keys_dir = "/workdir/fendermint/keys"
+    mkdir $fendermint_keys_dir
+    let eth_pk = $"($fendermint_keys_dir)/eth_pk"
+    $c.node_private_key | save -f $eth_pk
+
+    # Validator's key
+    fendermint key from-eth -s $eth_pk -n validator -o $fendermint_keys_dir
+    rm $eth_pk
+
+    # Network key
+    if not ($"($fendermint_keys_dir)/network.pk" | path exists) {
+      fendermint key gen --name network --out-dir $fendermint_keys_dir
+    }
+  }
 
   open "/repo/config/services/fendermint.config.toml" | merge deep {
     tendermint_rpc_url: $"http://($c.project_name)-cometbft-1:26657"
@@ -148,11 +181,26 @@ export def configure-fendermint [] {
         parent_http_endpoint: $c.parent_endpoint.url
         parent_gateway: $c.network.parent_chain.addresses.gateway
         parent_registry: $c.network.parent_chain.addresses.registry
-      } | merge (if ($c.parent_endpoint.token? | is-empty) {{}} else {{
-        parent_http_auth_token: $c.parent_endpoint.token
-      }}))
+      } | set-field parent_http_auth_token $c.parent_endpoint.token?)
     }
-  } | save -f "/workdir/fendermint/config/default.toml"
+  } |
+    set-field resolver.discovery.static_addresses $c.network.endpoints.fendermint_seeds? |
+    save -f "/workdir/fendermint/config/default.toml"
+
+  write-docker-service "fendermint" {
+    image: $c.images.fendermint
+    command: "run"
+    volumes: [
+      "./fendermint:/data"
+      $"($c.directories.datadir)/iroh-fendermint:/iroh-data"
+    ]
+    environment: {
+      FM_CONFIG_DIR: "/data/config"
+      FM_NETWORK: $c.network.address_network
+      IROH_RPC_ADDR: "0.0.0.0:4919"
+      IROH_PATH: "/iroh-data"
+    }
+  }
 }
 
 const prom_targets_dir = "/workdir/prometheus/etc/targets"
@@ -229,7 +277,7 @@ export def configure-relayer [] {
     image: $c.images.fendermint
     entrypoint: "sh /relayer/run.sh"
     volumes: [
-      $"($c.directories.workdir)/relayer:/relayer"
+      "./relayer:/relayer"
     ]
     environment: {
       subnet_id: $c.network.subnet.subnet_id
