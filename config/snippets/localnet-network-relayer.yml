@@ -1,5 +1,0 @@
-services:
-  relayer:
-    networks:
-      - default
-      - localnet

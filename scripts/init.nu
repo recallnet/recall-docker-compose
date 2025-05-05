@@ -51,18 +51,18 @@ def validate-config [] {
 
 let c = $env.node_config
 
+# Printing success for docker image build.
+print $"(ansi green_bold)✔(ansi reset)"
+
 validate-config
 step "Init docker-compose" { service-configs init-docker-compose }
 step "Configuring ipc-cli" { service-configs configure-ipc-cli }
 step "Configuring fendermint" { service-configs configure-fendermint }
 step "Configuring CometBFT" { service-configs configure-cometbft }
-step "Download genesis" { genesis download }
+step "Downloading genesis" { genesis download }
 step "Configuring ethapi" { service-configs configure-ethapi }
 step "Configuring objects" { service-configs configure-objects }
 step "Configuring recall-exporter" { service-configs configure-recall-exporter }
-# Printing success for docker image build.
-print $"(ansi green_bold)✔(ansi reset)"
-
 step "Configuring prometheus" { service-configs configure-prometheus }
 if $c.relayer.enable {
   step "Configuring relayer" { service-configs configure-relayer }
@@ -78,4 +78,7 @@ if ($c.http_docker_network?.network_name? | is-not-empty) {
 }
 if ($c.networking.host_bind_ip? | is-not-empty) {
   step "Configuring external ports" { service-configs configure-external-ports }
+}
+if $c.localnet.enable {
+  step "Configuring localnet" { service-configs configure-localnet }
 }

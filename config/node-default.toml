@@ -80,11 +80,12 @@ trusted_proxy_ips = []
 # They are: cometbft, ethapi, objects, faucet, and recall-s3
 # network_name = ""
 
-#  = == For testing and localnet
+#  === For testing and localnet
 [localnet]
+enable = false
 
 # External docker network.
-# network =
+# network = ""
 
 # Expose services required by recall CLI on the specified host
-# cli_bind_host =
+# cli_bind_host = "127.0.0.1"

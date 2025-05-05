@@ -507,3 +507,43 @@ export def configure-external-ports [] {
     }
   } | save -f $dc_file
 }
+
+export def configure-localnet [] {
+  let c = $env.node_config
+
+  let srv = ([
+    {name: cometbft only_if: true}
+    {name: fendermint only_if: true}
+    {name: ethapi only_if: true}
+    {name: objects only_if: true}
+    {name: recall-exporter only_if: true}
+    {name: relayer only_if: $c.relayer.enable}
+  ] | where only_if == true | each {[$in.name {
+    networks: {
+      localnet: {}
+    }
+  }]} | into record)
+
+  let cli_host = ($env.LOCALNET_CLI_BIND_HOST? | default $c.localnet.cli_bind_host)
+  let cli_binds = {
+    cometbft: {
+      ports: [ $"($cli_host):26657:26657" ]
+    }
+    ethapi: {
+      ports: [ $"($cli_host):8645:8545" ]
+    }
+    objects: {
+      ports: [ $"($cli_host):8001:8001" ]
+    }
+  }
+
+  open $dc_file | merge deep {
+    networks: {
+      localnet: {
+        name: $c.localnet.network
+        external: true
+      }
+    }
+    services: ($srv | merge deep $cli_binds)
+  } | save -f $dc_file
+}
