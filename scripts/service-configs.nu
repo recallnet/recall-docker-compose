@@ -484,3 +484,26 @@ export def configure-http-network [] {
     services: $http_services
   } | save -f $dc_file
 }
+
+export def configure-external-ports [] {
+  let c = $env.node_config
+  let ip = $c.networking.host_bind_ip
+  let ports = $c.networking.external_ports
+
+  open $dc_file | merge deep {
+    services: {
+      cometbft: {
+        ports: [ $"($ip):($ports.cometbft):26656" ]
+      }
+      fendermint: {
+        ports: [
+          $"($ip):($ports.fendermint):26655"
+          $"($ip):($ports.fendermint_iroh):11204/udp"
+        ]
+      }
+      objects: {
+        ports: [ $"($ip):($ports.objects_iroh):11204/udp" ]
+      }
+    }
+  } | save -f $dc_file
+}

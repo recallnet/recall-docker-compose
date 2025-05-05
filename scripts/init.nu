@@ -60,6 +60,9 @@ step "Download genesis" { genesis download }
 step "Configuring ethapi" { service-configs configure-ethapi }
 step "Configuring objects" { service-configs configure-objects }
 step "Configuring recall-exporter" { service-configs configure-recall-exporter }
+# Printing success for docker image build.
+print $"(ansi green_bold)✔(ansi reset)"
+
 step "Configuring prometheus" { service-configs configure-prometheus }
 if $c.relayer.enable {
   step "Configuring relayer" { service-configs configure-relayer }
@@ -72,4 +75,7 @@ if $c.registrar.enable {
 }
 if ($c.http_docker_network?.network_name? | is-not-empty) {
   step "Configuring HTTP network" { service-configs configure-http-network }
+}
+if ($c.networking.host_bind_ip? | is-not-empty) {
+  step "Configuring external ports" { service-configs configure-external-ports }
 }
