@@ -1,11 +1,11 @@
 
+const dc_file = "/workdir/docker-compose.yml"
+
 def write-docker-service [name: string, service_config: record] {
-  let dc_file = "/workdir/docker-compose.yml"
+  let c = $env.node_config
   let content = if ($dc_file | path exists) {
     open $dc_file
-  } else {{
-    name: $env.node_config.project_name
-  }}
+  } else {}
 
   let srv = ($service_config | merge {
     restart: "always"
@@ -83,6 +83,24 @@ def set-field [path: cell-path, value, transform?: closure] {
     let val = (if ($transform | is-empty) { $value } else { do $transform })
     $in | upsert $path $val
   }
+}
+
+export def init-docker-compose [] {
+  let c = $env.node_config
+
+  {
+    name: $c.project_name
+    networks: {
+      default: {
+        name: $c.project_name
+        ipam: {
+          config: [
+            { subnet: $c.networking.docker_network_subnet }
+          ]
+        }
+      }
+    }
+  } | save -f $dc_file
 }
 
 export def configure-ipc-cli [] {
@@ -344,10 +362,3 @@ export def configure-recall-s3 [] {
     targets: [ $"($c.project_name)-recall-s3-1:9090"]
   }] | save -f $"($prom_targets_dir)/recall-s3.json"
 }
-
-# # === Generated
-
-# write_env fendermint.env
-# write_env ethapi.env
-# write_env objects.env
-# write_env recall-exporter.env

@@ -52,17 +52,18 @@ def validate-config [] {
 let c = $env.node_config
 
 validate-config
-step "Configure ipc-cli" { service-configs configure-ipc-cli }
-step "Configure fendermint" { service-configs configure-fendermint }
-step "Configure CometBFT" { service-configs configure-cometbft }
+step "Init docker-compose" { service-configs init-docker-compose }
+step "Configuring ipc-cli" { service-configs configure-ipc-cli }
+step "Configuring fendermint" { service-configs configure-fendermint }
+step "Configuring CometBFT" { service-configs configure-cometbft }
 step "Download genesis" { genesis download }
-step "Configure prometheus" { service-configs configure-prometheus }
+step "Configuring prometheus" { service-configs configure-prometheus }
 if $c.relayer.enable {
-  step "Configure relayer" { service-configs configure-relayer }
+  step "Configuring relayer" { service-configs configure-relayer }
 }
 if $c.recall_s3.enable {
-  step "Configure recall-s3" { service-configs configure-recall-s3 }
+  step "Configuring recall-s3" { service-configs configure-recall-s3 }
 }
 if $c.registrar.enable {
-  step "Configure registrar" { service-configs configure-registrar }
+  step "Configuring registrar" { service-configs configure-registrar }
 }
