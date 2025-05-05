@@ -343,6 +343,18 @@ export def configure-prometheus [] {
     ]
     rule_files: [ "/etc/prometheus/rules/*.yml" ]
   } | save -f "/workdir/prometheus/etc/config.yml"
+
+  write-docker-service "prometheus" {
+    image: $c.images.prometheus
+    volumes: [
+      "./prometheus/etc:/etc/prometheus"
+      "./prometheus/data:/prometheus"
+    ]
+    command: ([
+      "--config.file=/etc/prometheus/config.yml"
+      "--storage.tsdb.retention.time=10m"
+    ] | str join " ")
+  }
 }
 
 export def configure-relayer [] {
