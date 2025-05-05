@@ -221,6 +221,27 @@ export def configure-fendermint [] {
   }
 }
 
+export def configure-ethapi [] {
+  let c = $env.node_config
+
+  write-docker-service "ethapi" {
+    image: $c.images.fendermint
+    command: "eth run"
+    volumes: [
+      "./fendermint:/data"
+    ]
+    depends_on: [ "fendermint" ]
+    environment: {
+      TENDERMINT_RPC_URL: $"http://($c.project_name)-cometbft-1:26657"
+      TENDERMINT_WS_URL: $"ws://($c.project_name)-cometbft-1:26657/websocket"
+      FM_ETH__METRICS__LISTEN__HOST: "0.0.0.0"
+      FM_ETH__CORS__ALLOWED_ORIGINS: "*"
+      FM_ETH__CORS__ALLOWED_METHODS: "GET,HEAD,OPTIONS,POST"
+      FM_ETH__CORS__ALLOWED_HEADERS: "Accept,Authorization,Content-Type,Origin"
+    }
+  }
+}
+
 const prom_targets_dir = "/workdir/prometheus/etc/targets"
 export def configure-prometheus [] {
   rm -rf $prom_targets_dir

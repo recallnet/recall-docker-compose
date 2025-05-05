@@ -57,6 +57,7 @@ step "Configuring ipc-cli" { service-configs configure-ipc-cli }
 step "Configuring fendermint" { service-configs configure-fendermint }
 step "Configuring CometBFT" { service-configs configure-cometbft }
 step "Download genesis" { genesis download }
+step "Configuring ethapi" { service-configs configure-ethapi }
 step "Configuring prometheus" { service-configs configure-prometheus }
 if $c.relayer.enable {
   step "Configuring relayer" { service-configs configure-relayer }
