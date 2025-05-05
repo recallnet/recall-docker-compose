@@ -49,9 +49,6 @@ fendermint_snapshot_block_interval = 10000
 # Set to true if you want to run your own subnet relayer.
 enable = false
 
-# Optional unless enable_relayer = true
-checkpoint_interval_sec = 600
-max_parallelism = 1
 # Optional unless relayer.enable = true
 # private_key = ""
 

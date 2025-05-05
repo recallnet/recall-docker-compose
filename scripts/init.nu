@@ -52,7 +52,6 @@ def validate-config [] {
 def set-up-keys [] {
   let cometbft_dir = "/workdir/cometbft"
   let fendermint_dir = "/workdir/fendermint"
-  let relayer_dir = "/workdir/relayer"
   let fendermint_keys_dir = $"($fendermint_dir)/keys"
   let ipc_dir = "/workdir/ipc"
 
@@ -74,28 +73,18 @@ def set-up-keys [] {
   # === CometBFT
   fendermint key into-tendermint -s $"($fendermint_keys_dir)/validator.sk" -o $"($cometbft_dir)/config/priv_validator_key.json"
 
-  # === ipc-cli
-  mkdir $ipc_dir
-  let cfg = $"($ipc_dir)/config.toml"
-  {keystore_path: $ipc_dir} | save -f $cfg
-
-  ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $env.node_config.node_private_key o> /dev/null
-
-  # === Relayer
-  if $env.node_config.relayer.enable {
-    mkdir $"($relayer_dir)/ipc"
-    let cfg = $"($relayer_dir)/ipc/config.toml"
-    {keystore_path: $"($relayer_dir)/ipc"} | save -f $cfg
-    ipc-cli --config-path $cfg wallet import --wallet-type evm --private-key $env.node_config.node_private_key o> /dev/null
-  }
 }
 
-validate-config
-step "Init CometBFT" { cometbft init --home /workdir/cometbft }
-step "Download genesis" { genesis download }
-step "Set up node keys" { set-up-keys }
+let c = $env.node_config
 
-step "Write ipc-cli config" { service-configs write-ipc-cli }
-step "Write CometBFT config" { service-configs write-cometbft  }
-step "Write fendermint config" { service-configs write-fendermint }
-step "Write prometheus config" { service-configs write-prometheus }
+# validate-config
+# step "Init CometBFT" { cometbft init --home /workdir/cometbft }
+# step "Download genesis" { genesis download }
+# step "Set up node keys" { set-up-keys }
+step "Configure ipc-cli" { service-configs write-ipc-cli }
+# step "Configure CometBFT" { service-configs write-cometbft  }
+# step "Configure fendermint" { service-configs write-fendermint }
+# step "Configure prometheus" { service-configs write-prometheus }
+if $c.relayer.enable {
+  step "Configure relayer" { service-configs write-relayer }
+}

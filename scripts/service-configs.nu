@@ -1,12 +1,50 @@
 
-export def write-ipc-cli [] {
+def write-docker-service [name: string, service_config: record] {
+  let dc_file = "/workdir/docker-compose.yml"
+  let content = if ($dc_file | path exists) {
+    open $dc_file
+  } else {{
+    name: $env.node_config.project_name
+  }}
+
+  let srv = ($service_config | merge {
+    restart: "always"
+    networks: {
+      default: {
+        ipv4_address: (service-ip $name)
+      }
+    }
+  })
+
+  $content | merge deep {
+    services: ({} | insert $name $srv )
+  } | save -f $dc_file
+}
+
+def service-ip [service: string] {
+  let prefix = ($env.node_config.networking.docker_network_subnet | str replace -r "\\.\\d+/.*" "")
+  match $service {
+    "cometbft" => $"($prefix).10"
+    "fendermint" => $"($prefix).11"
+    "ethapi" => $"($prefix).12"
+    "objects" => $"($prefix).13"
+    "recall-exporter" => $"($prefix).14"
+    "prometheus" => $"($prefix).15"
+    "relayer" => $"($prefix).16"
+
+    "recall-s3" => $"($prefix).20"
+    "registrar" => $"($prefix).21"
+  }
+}
+
+def ipc-config [keystore_path] {
   let net = $env.node_config.network
   let patch = if ($env.node_config.parent_endpoint.token? | is-empty) {{}} else {
     auth_token: $env.node_config.parent_endpoint.token
   }
 
   {
-    keystore_path: "/fendermint/.ipc"
+    keystore_path: $keystore_path
     subnets: [
       {
         id: $"/r($net.parent_chain.chain_id)"
@@ -29,7 +67,22 @@ export def write-ipc-cli [] {
         }
       }
     ]
-  } | save -f "/workdir/ipc/config.toml"
+  }
+}
+
+def write-ipc-key [dir, private_key] {
+  let addr = (cast wallet address $private_key)
+
+  [{
+    address: $addr
+    private_key: ($private_key | str replace "0x" "")
+  }] | save -f ($dir | path join "evm_keystore.json")
+}
+
+export def write-ipc-cli [] {
+  mkdir /workdir/ipc
+  ipc-config "/fendermint/.ipc" | save -f "/workdir/ipc/config.toml"
+  write-ipc-key /workdir/ipc $env.node_config.node_private_key
 }
 
 export def write-cometbft [] {
@@ -161,15 +214,35 @@ export def write-prometheus [] {
   } | save -f "/workdir/prometheus/etc/config.yml"
 }
 
-# # Relayer
-# if [ $enable_relayer == "true" ]; then
-#   mkdir -p /workdir/relayer/ipc
-#   export relayer_address=$(jq -r '.[].address' < /workdir/relayer/ipc/evm_keystore.json)
-#   export keystore_path=/relayer/ipc
-#   envsubst < /repo/config/services/run-relayer.sh > /workdir/relayer/run.sh
-#   envsubst < /repo/config/services/ipc.config.toml > /workdir/relayer/ipc/config.toml
-#   echo '[{"targets":["'${project_name}'-relayer-1:9184"]}]' > $prom_targets_dir/relayer.json
-# fi
+export def write-relayer [] {
+  mkdir /workdir/relayer/ipc
+  let c = $env.node_config
+  let addr = (cast wallet address $c.relayer.private_key)
+
+  # ipc-config
+  ipc-config "/relayer/ipc" | save -f /workdir/relayer/ipc/config.toml
+  write-ipc-key /workdir/relayer/ipc $c.relayer.private_key
+
+  # container
+  cp /repo/config/services/run-relayer.sh /workdir/relayer/run.sh
+  write-docker-service "relayer" {
+    image: $c.images.fendermint
+    entrypoint: "sh /relayer/run.sh"
+    volumes: [
+      $"($c.directories.workdir)/relayer:/relayer"
+    ]
+    environment: {
+      subnet_id: $c.network.subnet.subnet_id
+      relayer_address: $addr
+    }
+    depends_on: [ "fendermint" ]
+  }
+
+  # metrics
+  [{
+    targets: [ $"($c.project_name)-relayer-1:9184"]
+  }] | save -f $"($prom_targets_dir)/relayer.json"
+}
 
 # if [ $enable_registrar == "true" ]; then
 #   export recall_exporter_subnet_faucet_contract_address=$subnet_faucet_contract_address
