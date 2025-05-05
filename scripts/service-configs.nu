@@ -439,3 +439,29 @@ export def configure-recall-s3 [] {
     targets: [ $"($c.project_name)-recall-s3-1:9090"]
   }] | save -f $"($prom_targets_dir)/recall-s3.json"
 }
+
+export def configure-http-network [] {
+  let c = $env.node_config
+
+  let http_services = ([
+    {name: cometbft only_if: true}
+    {name: ethapi only_if: true}
+    {name: objects only_if: true}
+    {name: registrar only_if: $c.registrar.enable}
+    {name: recall-s3 only_if: $c.recall_s3.enable}
+    ] | where only_if == true | each {[$in.name {
+      networks: {
+        external-http: {}
+      }
+    }]} | into record)
+
+  open $dc_file | merge deep {
+    networks: {
+      external-http: {
+        name: $c.http_docker_network.network_name
+        external: true
+      }
+    }
+    services: $http_services
+  } | save -f $dc_file
+}

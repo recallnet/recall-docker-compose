@@ -70,3 +70,6 @@ if $c.recall_s3.enable {
 if $c.registrar.enable {
   step "Configuring registrar" { service-configs configure-registrar }
 }
+if ($c.http_docker_network?.network_name? | is-not-empty) {
+  step "Configuring HTTP network" { service-configs configure-http-network }
+}
