@@ -79,13 +79,13 @@ def write-ipc-key [dir, private_key] {
   }] | save -f ($dir | path join "evm_keystore.json")
 }
 
-export def write-ipc-cli [] {
+export def configure-ipc-cli [] {
   mkdir /workdir/ipc
   ipc-config "/fendermint/.ipc" | save -f "/workdir/ipc/config.toml"
   write-ipc-key /workdir/ipc $env.node_config.node_private_key
 }
 
-export def write-cometbft [] {
+export def configure-cometbft [] {
   let c = $env.node_config
 
   def statesync [] {
@@ -133,7 +133,7 @@ export def write-cometbft [] {
   } | save -f /workdir/cometbft/config/config.toml
 }
 
-export def write-fendermint [] {
+export def configure-fendermint [] {
   mkdir "/workdir/fendermint/config"
   let c = $env.node_config
 
@@ -156,7 +156,7 @@ export def write-fendermint [] {
 }
 
 const prom_targets_dir = "/workdir/prometheus/etc/targets"
-export def write-prometheus [] {
+export def configure-prometheus [] {
   rm -rf $prom_targets_dir
   rm -rf "/workdir/prometheus/etc/rules"
   mkdir $prom_targets_dir
@@ -214,7 +214,7 @@ export def write-prometheus [] {
   } | save -f "/workdir/prometheus/etc/config.yml"
 }
 
-export def write-relayer [] {
+export def configure-relayer [] {
   mkdir /workdir/relayer/ipc
   let c = $env.node_config
   let addr = (cast wallet address $c.relayer.private_key)
@@ -244,7 +244,7 @@ export def write-relayer [] {
   }] | save -f $"($prom_targets_dir)/relayer.json"
 }
 
-export def write-registrar [] {
+export def configure-registrar [] {
   let c = $env.node_config
 
   write-docker-service "registrar" {
@@ -268,7 +268,7 @@ export def write-registrar [] {
   }] | save -f $"($prom_targets_dir)/registrar.json"
 }
 
-export def write-recall-s3 [] {
+export def configure-recall-s3 [] {
   let c = $env.node_config
   write-docker-service "recall-s3" {
     image: $c.images.recall_s3
@@ -298,24 +298,8 @@ export def write-recall-s3 [] {
 }
 
 # # === Generated
-# # It's using some environment variables set above!!!
-# mkdir -p /workdir/generated
-# function write_env {
-#   local cfg=$1
-#   local source_file=/repo/config/services/$1
-#   (
-#     source $source_file
-#     cat $source_file | awk -F '=' '/=/ {print $1 "=\"" ENVIRON[$1] "\""}' > /workdir/generated/$cfg
-#   )
-# }
-# set -a
-# subnet_prefix=$(echo $docker_network_subnet | sed -e 's|\.[0-9]*/.*||')
-# write_env service-ips.env
-# source /workdir/generated/service-ips.env
 
 # write_env fendermint.env
 # write_env ethapi.env
 # write_env objects.env
 # write_env recall-exporter.env
-# if [ $enable_recall_s3 == "true" ]; then write_env recall-s3.env; fi
-# if [ $enable_registrar == "true" ]; then write_env registrar.env; fi

@@ -81,16 +81,16 @@ let c = $env.node_config
 # step "Init CometBFT" { cometbft init --home /workdir/cometbft }
 # step "Download genesis" { genesis download }
 # step "Set up node keys" { set-up-keys }
-step "Configure ipc-cli" { service-configs write-ipc-cli }
-# step "Configure CometBFT" { service-configs write-cometbft  }
-# step "Configure fendermint" { service-configs write-fendermint }
-# step "Configure prometheus" { service-configs write-prometheus }
+step "Configure ipc-cli" { service-configs configure-ipc-cli }
+# step "Configure CometBFT" { service-configs configure-cometbft  }
+# step "Configure fendermint" { service-configs configure-fendermint }
+# step "Configure prometheus" { service-configs configure-prometheus }
 if $c.relayer.enable {
-  step "Configure relayer" { service-configs write-relayer }
+  step "Configure relayer" { service-configs configure-relayer }
 }
 if $c.recall_s3.enable {
-  step "Configure recall-s3" { service-configs write-recall-s3 }
+  step "Configure recall-s3" { service-configs configure-recall-s3 }
 }
 if $c.registrar.enable {
-  step "Configure registrar" { service-configs write-registrar }
+  step "Configure registrar" { service-configs configure-registrar }
 }
