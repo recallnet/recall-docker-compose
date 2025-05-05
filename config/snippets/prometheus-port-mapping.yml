@@ -1,4 +1,0 @@
-services:
-  prometheus:
-    ports:
-      - $prometheus_bind_address:9090

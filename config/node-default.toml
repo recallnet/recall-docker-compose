@@ -72,12 +72,13 @@ trusted_proxy_ips = []
 
 [prometheus]
 # Docker network name that prometheus will join
-# external_network =
-# bind_address =
+# external_network = ""
+# bind_address = ""
 
+[http_docker_network]
 # Docker network name that all services exposing HTTP services will join
 # They are: cometbft, ethapi, objects, faucet, and recall-s3
-# http_external_network =
+# network_name = ""
 
 #  = == For testing and localnet
 [localnet]

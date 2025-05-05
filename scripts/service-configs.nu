@@ -354,6 +354,25 @@ export def configure-prometheus [] {
       "--config.file=/etc/prometheus/config.yml"
       "--storage.tsdb.retention.time=10m"
     ] | str join " ")
+    ports: (if ($c.prometheus.bind_address? | is-empty) {[]} else {[$"($c.prometheus.bind_address):9090"]})
+  }
+
+  if ($c.prometheus?.external_network? | is-not-empty) {
+    open $dc_file | merge deep {
+      networks: {
+        prometheus: {
+          name: $c.prometheus.external_network
+          external: true
+        }
+      }
+      services: {
+        prometheus: {
+          networks: {
+            prometheus: {}
+          }
+        }
+      }
+    } | save -f $dc_file
   }
 }
 
