@@ -27,7 +27,7 @@ def step [name: string, fn: closure] {
     print $"ERROR: ($result.err)"
     exit 15
   } else {
-    print "✅"
+    print $"(ansi green_bold)✔(ansi reset)"
   }
 }
 
@@ -58,6 +58,8 @@ step "Configuring fendermint" { service-configs configure-fendermint }
 step "Configuring CometBFT" { service-configs configure-cometbft }
 step "Download genesis" { genesis download }
 step "Configuring ethapi" { service-configs configure-ethapi }
+step "Configuring objects" { service-configs configure-objects }
+step "Configuring recall-exporter" { service-configs configure-recall-exporter }
 step "Configuring prometheus" { service-configs configure-prometheus }
 if $c.relayer.enable {
   step "Configuring relayer" { service-configs configure-relayer }

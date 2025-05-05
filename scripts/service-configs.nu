@@ -242,6 +242,50 @@ export def configure-ethapi [] {
   }
 }
 
+export def configure-objects [] {
+  let c = $env.node_config
+
+  write-docker-service "objects" {
+    image: $c.images.fendermint
+    command: "objects run"
+    volumes: [
+      "./fendermint:/data"
+      $"($c.directories.datadir)/iroh-objects:/iroh-data"
+    ]
+    depends_on: [ "fendermint" "cometbft" ]
+    environment: {
+      TENDERMINT_RPC_URL: $"http://($c.project_name)-cometbft-1:26657"
+      FM_OBJECTS__METRICS__LISTEN__HOST: "0.0.0.0"
+      FM_NETWORK: $c.network.address_network
+      IROH_RESOLVER_RPC_ADDR: $"(service-ip "fendermint"):4919"
+      IROH_PATH: /iroh-data
+    }
+  }
+}
+
+export def configure-recall-exporter [] {
+  let c = $env.node_config
+
+  write-docker-service "recall-exporter" {
+    image: $c.images.recall_exporter
+    depends_on: [ "ethapi" ]
+    environment: ({
+      METRICS_ADDRESS: "0.0.0.0:9010"
+      VALIDATOR_ADDRESS: (cast wallet address $c.node_private_key)
+      PARENT_CHAIN_RPC_URL: $c.parent_endpoint.url
+      PARENT_CHAIN_SUBNET_CONTRACT_ADDRESS: $c.network.parent_chain.addresses.subnet_contract
+      SUBNET_RPC_URL: $"http://($c.project_name)-ethapi-1:8545"
+      SUBNET_GATEWAY_ADDRESS: "0x77aa40b105843728088c0132e43fc44348881da8" # this is fix
+      SUBNET_MEMBERSHIP_CHECK_INTERVAL: "10m"
+      SUBNET_BLOB_MANAGER_CONTRACT_ADDRESS: $c.network.subnet.addresses.blob_manager
+      SUBNET_STATS_CHECK_INTERVAL: "5m"
+    } |
+      set-field RELAYER_ADDRESS $c.relayer?.private_key? {cast wallet address $c.relayer.private_key} |
+      set-field PARENT_CHAIN_RPC_BEARER_TOKEN $c.parent_endpoint.token? |
+      set-field FAUCET_ADDRESS $c.network.subnet?.addresses.faucet_contract? )
+  }
+}
+
 const prom_targets_dir = "/workdir/prometheus/etc/targets"
 export def configure-prometheus [] {
   rm -rf $prom_targets_dir
