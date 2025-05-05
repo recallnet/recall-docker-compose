@@ -66,9 +66,9 @@ enable = false
 # Set to true if you want to run your own registrar service.
 enable = false
 # Optional unless enable_registrar = true
-# faucet_owner_private_key =
-# turnstile_secret_key =
-# trusted_proxy_ips =
+# faucet_owner_private_key = ""
+# turnstile_secret_key = ""
+trusted_proxy_ips = []
 
 [prometheus]
 # Docker network name that prometheus will join

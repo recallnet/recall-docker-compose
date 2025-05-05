@@ -244,10 +244,29 @@ export def write-relayer [] {
   }] | save -f $"($prom_targets_dir)/relayer.json"
 }
 
-# if [ $enable_registrar == "true" ]; then
-#   export recall_exporter_subnet_faucet_contract_address=$subnet_faucet_contract_address
-#   echo '[{"targets":["'${project_name}'-registrar-1:9090"]}]' > $prom_targets_dir/registrar.json
-# fi
+export def write-registrar [] {
+  let c = $env.node_config
+
+  write-docker-service "registrar" {
+    image: $c.images.registrar
+    depends_on: [ "ethapi" ]
+    environment: {
+      PRIVATE_KEY: $c.registrar.faucet_owner_private_key
+      FAUCET_ADDRESS: $c.network.subnet.addresses.faucet_contract
+      TRUSTED_PROXY_IPS: ($c.registrar.trusted_proxy_ips | str join ",")
+      EVM_RPC_URL: $"http://($c.project_name)-ethapi-1:8545"
+      LISTEN_HOST: "0.0.0.0"
+      LISTEN_PORT: "8080"
+      METRICS_LISTEN_ADDRESS: "0.0.0.0:9090"
+      TS_SECRET_KEY: $c.registrar.turnstile_secret_key
+    }
+  }
+
+  # metrics
+  [{
+    targets: [ $"($c.project_name)-registrar-1:9090"]
+  }] | save -f $"($prom_targets_dir)/registrar.json"
+}
 
 # if [ $enable_recall_s3 == "true" ]; then
 #   echo '[{"targets":["'${project_name}'-recall-s3-1:9090"]}]' > $prom_targets_dir/recall-s3.json

@@ -88,3 +88,6 @@ step "Configure ipc-cli" { service-configs write-ipc-cli }
 if $c.relayer.enable {
   step "Configure relayer" { service-configs write-relayer }
 }
+if $c.registrar.enable {
+  step "Configure registrar" { service-configs write-registrar }
+}
