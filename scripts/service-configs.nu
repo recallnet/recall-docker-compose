@@ -105,7 +105,7 @@ export def init-docker-compose [] {
 
 export def configure-ipc-cli [] {
   mkdir /workdir/ipc
-  ipc-config "/fendermint/.ipc" | save -f "/workdir/ipc/config.toml"
+  ipc-config "/workdir/ipc" | save -f "/workdir/ipc/config.toml"
   write-ipc-key /workdir/ipc $env.node_config.node_private_key
 }
 
@@ -549,9 +549,18 @@ export def configure-localnet [] {
 }
 
 export def write-node-tools [] {
+  mkdir /workdir/scripts
+  $env.node_config | save -f /workdir/scripts/config.yml
+
+  cp /repo/scripts/node-tools.nu /workdir/scripts/node-tools
+  cp /repo/scripts/util.nu /workdir/scripts/
+
   let tools_file = "/workdir/node-tools"
-  r#' #!/usr/bin/env bash
-  echo hello
-  '# | save -f $tools_file
+  [
+    "#!/usr/bin/env bash"
+    "set -e"
+    $"docker run --name node-tools --rm -it -v ($env.USER_SPACE_WORKDIR):/workdir ($env.TOOLS_IMAGE) /workdir/scripts/node-tools $@"
+    ""
+  ] | str join "\n" | save -f $tools_file
   chmod +x $tools_file
 }

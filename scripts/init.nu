@@ -2,20 +2,7 @@
 
 use genesis.nu
 use service-configs.nu
-
-def read-config [] {
-  let config = open "/repo/config/node-default.toml" |
-    merge deep (open "/repo/config/node.toml")
-  let network = (open $"/repo/config/network-($config.network_name).toml")
-
-  $config | merge { network: $network }
-}
-
-def parent-rpc-url [] {
-  if ("token" in $env.node_config.parent_endpoint) {
-  $"($env.node_config.parent_endpoint.url)?token=($env.node_config.parent_endpoint.token)"
-  } else $env.node_config.parent_endpoint.url
-}
+use util.nu
 
 def step [name: string, fn: closure] {
   print -n $"($name)... "
@@ -30,17 +17,19 @@ def step [name: string, fn: closure] {
 }
 
 def validate-config [] {
+  let c = $env.node_config
+
   step "Checking parent chain RPC endpoint" {
-    let result = (cast chain-id --rpc-url (parent-rpc-url) | complete)
+    let result = (cast chain-id --rpc-url (util parent-rpc-url $c.parent_endpoint) | complete)
     if $result.exit_code != 0 {
       {err: $result.stderr}
     }
   }
 
-  if ("evm_rpc_url" in $env.node_config.network.endpoints) {
+  if ("evm_rpc_url" in $c.network.endpoints) {
     step "Checking wallet balance on subnet" {
-      let address = (cast wallet address $env.node_config.node_private_key)
-      if (cast balance --rpc-url $env.node_config.network.endpoints.evm_rpc_url $address | into int) == 0 {
+      let address = (cast wallet address $c.node_private_key)
+      if (cast balance --rpc-url $c.network.endpoints.evm_rpc_url $address | into int) == 0 {
         { err: $"ERROR: no funds on subnet for the node address ($address)" }
       }
     }
@@ -48,14 +37,14 @@ def validate-config [] {
 }
 
 def main [] {
-  $env.node_config = (read-config)
+  $env.node_config = (util read-config)
   let c = $env.node_config
 
   # Printing success for docker image build.
   print $"(ansi green_bold)✔(ansi reset)"
+
   validate-config
   step "Init docker-compose" { service-configs init-docker-compose }
-  step "Configuring ipc-cli" { service-configs configure-ipc-cli }
   step "Configuring fendermint" { service-configs configure-fendermint }
   step "Configuring CometBFT" { service-configs configure-cometbft }
   step "Downloading genesis" { genesis download }
@@ -81,5 +70,6 @@ def main [] {
   if $c.localnet.enable {
     step "Configuring localnet" { service-configs configure-localnet }
   }
+  step "Configuring ipc-cli" { service-configs configure-ipc-cli }
   step "Writing node tools" { service-configs write-node-tools }
 }
