@@ -396,6 +396,7 @@ export def configure-relayer [] {
     environment: {
       subnet_id: $c.network.subnet.subnet_id
       relayer_address: $addr
+      relayer_checkpoint_interval_sec: $c.services.relayer_checkpoint_interval_sec
     }
     depends_on: [ "fendermint" ]
   }
