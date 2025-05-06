@@ -281,12 +281,8 @@ export def configure-recall-exporter [] {
     } |
       set-field RELAYER_ADDRESS $c.relayer?.private_key? {cast wallet address $c.relayer.private_key} |
       set-field PARENT_CHAIN_RPC_BEARER_TOKEN $c.parent_endpoint.token? |
-      merge (
-        if ($c.network.subnet? | is-empty) {{}} else {
-          FAUCET_ADDRESS: $c.network.subnet.addresses.faucet_contract
-          SUBNET_BLOB_MANAGER_CONTRACT_ADDRESS: $c.network.subnet.addresses.blob_manager
-        }
-      )
+      set-field FAUCET_ADDRESS $c.network.subnet.addresses?.faucet_contract? |
+      set-field SUBNET_BLOB_MANAGER_CONTRACT_ADDRESS $c.network.subnet.addresses?.blob_manager?
     )
   }
 }
