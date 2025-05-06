@@ -277,12 +277,17 @@ export def configure-recall-exporter [] {
       SUBNET_RPC_URL: $"http://($c.project_name)-ethapi-1:8545"
       SUBNET_GATEWAY_ADDRESS: "0x77aa40b105843728088c0132e43fc44348881da8" # this is fix
       SUBNET_MEMBERSHIP_CHECK_INTERVAL: "10m"
-      SUBNET_BLOB_MANAGER_CONTRACT_ADDRESS: $c.network.subnet.addresses.blob_manager
       SUBNET_STATS_CHECK_INTERVAL: "5m"
     } |
       set-field RELAYER_ADDRESS $c.relayer?.private_key? {cast wallet address $c.relayer.private_key} |
       set-field PARENT_CHAIN_RPC_BEARER_TOKEN $c.parent_endpoint.token? |
-      set-field FAUCET_ADDRESS $c.network.subnet?.addresses.faucet_contract? )
+      merge (
+        if ($c.network.subnet? | is-empty) {{}} else {
+          FAUCET_ADDRESS: $c.network.subnet.addresses.faucet_contract
+          SUBNET_BLOB_MANAGER_CONTRACT_ADDRESS: $c.network.subnet.addresses.blob_manager
+        }
+      )
+    )
   }
 }
 
