@@ -27,7 +27,8 @@ def "main join-subnet" [
   ipc-cli subnet join --from (cast wallet address $c.node_private_key) --subnet $c.network.subnet.subnet_id --collateral $collateral
 }
 
-def "main node-info" [] {
+# Print cometbft and fendermint peer IDs.
+def "main show-peer-ids" [] {
   {
     cometbft_id: (cometbft --home /workdir/cometbft show-node-id)
     fendermint_id: (fendermint key show-peer-id --public-key /workdir/fendermint/keys/network.pk)

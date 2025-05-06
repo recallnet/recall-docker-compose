@@ -72,4 +72,6 @@ def main [] {
   }
   step "Configuring ipc-cli" { service-configs configure-ipc-cli }
   step "Writing node tools" { service-configs write-node-tools }
+
+  print $"\n--> Done. Now you can run 'cd ($env.USER_SPACE_WORKDIR); docker compose up -d'"
 }
