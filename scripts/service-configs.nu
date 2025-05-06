@@ -210,7 +210,7 @@ export def configure-fendermint [] {
     command: "run"
     volumes: [
       "./fendermint:/data"
-      $"($c.directories.datadir)/iroh-fendermint:/iroh-data"
+      $"($c.datadir)/iroh-fendermint:/iroh-data"
     ]
     environment: {
       FM_CONFIG_DIR: "/data/config"
@@ -250,7 +250,7 @@ export def configure-objects [] {
     command: "objects run"
     volumes: [
       "./fendermint:/data"
-      $"($c.directories.datadir)/iroh-objects:/iroh-data"
+      $"($c.datadir)/iroh-objects:/iroh-data"
     ]
     depends_on: [ "fendermint" "cometbft" ]
     environment: {
@@ -546,4 +546,12 @@ export def configure-localnet [] {
     }
     services: ($srv | merge deep $cli_binds)
   } | save -f $dc_file
+}
+
+export def write-node-tools [] {
+  let tools_file = "/workdir/node-tools"
+  r#' #!/usr/bin/env bash
+  echo hello
+  '# | save -f $tools_file
+  chmod +x $tools_file
 }
