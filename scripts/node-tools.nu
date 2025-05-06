@@ -34,3 +34,13 @@ def "main show-peer-ids" [] {
     fendermint_id: (fendermint key show-peer-id --public-key /workdir/fendermint/keys/network.pk)
   } | to yaml
 }
+
+# Prints node status
+def "main status" [] {
+  let c = (read-config)
+  let status = (http get $"http://($c.project_name)-cometbft-1:26657/status")
+  $status.result.sync_info
+    | select latest_block_height latest_block_time earliest_block_height earliest_block_time catching_up
+    | merge { voting_power: $status.result.validator_info.voting_power }
+    | to yaml
+}

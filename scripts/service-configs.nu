@@ -552,7 +552,8 @@ export def configure-localnet [] {
 
 export def write-node-tools [] {
   mkdir /workdir/scripts
-  $env.node_config | save -f /workdir/scripts/config.yml
+  let c = $env.node_config
+  $c | save -f /workdir/scripts/config.yml
 
   cp /repo/scripts/node-tools.nu /workdir/scripts/node-tools
   cp /repo/scripts/util.nu /workdir/scripts/
@@ -561,7 +562,7 @@ export def write-node-tools [] {
   [
     "#!/usr/bin/env bash"
     "set -e"
-    $"docker run --name node-tools --rm -it -v ($env.USER_SPACE_WORKDIR):/workdir ($env.TOOLS_IMAGE) /workdir/scripts/node-tools $@"
+    $"docker run --name node-tools --rm -it -v ($env.USER_SPACE_WORKDIR):/workdir --network ($c.project_name) ($env.TOOLS_IMAGE) /workdir/scripts/node-tools $@"
     ""
   ] | str join "\n" | save -f $tools_file
   chmod +x $tools_file

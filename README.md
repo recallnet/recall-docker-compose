@@ -26,7 +26,7 @@ Please note that we are working on features that may help alleviate the storage 
 3. Run `./init-workdir <path, default ./workdir>` - This will create in `workdir` required configuration for node services based on your configuration in `node.toml`.
 4. Run `cd workdir; docker compose up -d` to run detached.
    * The node will download the latest snapshot and start syncronizing remaining blocks.
-   * When the node is in sync with the network, `cometbft` service logs `finalizing commit of block` for every committed block.
+   * Inspect output of `./workdir/node-tools status`. A node is in sync with the network when `catching_up: false`.
 
 ### Customizing node configuration
 `./config/node-template.toml` contains a minimal configuration to run a node.
