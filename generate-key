@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -e
+
+docker run --rm -it ghcr.io/foundry-rs/foundry:stable "cast wallet new"

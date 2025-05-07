@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -eu
+
+repo_dir=$(cd $(dirname $0); pwd)
+workdir=${1:-./workdir}
+
+mkdir -p $workdir
+workdir=$(cd $workdir; pwd)
+
+echo "Initializing $workdir"
+echo -n "Building init docker images... "
+docker build -q -t recall-nushell -f $repo_dir/scripts/nushell.Dockerfile $repo_dir/scripts > /dev/null
+
+source <(docker run --rm -it -v $repo_dir:/repo recall-nushell /repo/scripts/bootstrap.nu $repo_dir $workdir)

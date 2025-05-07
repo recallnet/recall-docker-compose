@@ -1,0 +1,89 @@
+#  === This file contains default configuration that is overwritten by node.toml
+
+network_name = "testnet" # points to network-${network_name}.toml
+node_name = "node-0"
+
+# docker-compose namespace, all docker containers will have this prefix
+project_name = "testnet-node-0"
+
+# datadir contains uploaded user blobs.
+# It should be either absolute or relative to workdir.
+datadir = "./data"
+
+[images]
+fendermint = "textile/fendermint:sha-dc4da8c"
+cometbft = "cometbft/cometbft:v0.37.x"
+recall_exporter = "textilemachine/recall-exporter:sha-c6d1903"
+prometheus = "prom/prometheus:v2.54.1"
+registrar = "textilemachine/registrar:729f7f8"
+recall_s3 = "textilemachine/recall-s3:sha-ed7b338"
+
+[networking]
+# The IP range should be at least /24.
+docker_network_subnet = "192.168.55.0/24"
+
+# IP address to bind the ports of the services to.
+# Set to your host IP or 0.0.0.0
+host_bind_ip="127.0.0.1"
+
+# IP address to advertise to peers for them to dial.
+# You might want to change it if the node is running behind a proxy or NAT.
+# advertised_external_ip = ""
+
+[networking.external_ports]
+# These ports should be open on the host machine
+cometbft = 26656
+fendermint = 26655
+fendermint_iroh = 11204
+objects_iroh = 11206
+
+[services]
+# cometbft_statesync_enable must be false for the bootstrapping node.
+cometbft_statesync_enable = true
+fendermint_snapshot_block_interval = 10000
+relayer_checkpoint_interval_sec = 600
+
+[relayer]
+# Set to true if you want to run your own subnet relayer.
+enable = false
+
+# Optional unless relayer.enable = true
+# private_key = ""
+
+[recall_s3]
+# Set to true to run recall-s3 service
+enable = false
+# Optional unless enable_recall_s3 = true
+# access_key = ""
+# secret_key = ""
+# Public recall-s3 domain
+# domain = ""
+
+
+[registrar]
+# Set to true if you want to run your own registrar service.
+enable = false
+# Optional unless enable_registrar = true
+# faucet_owner_private_key = ""
+# turnstile_secret_key = ""
+trusted_proxy_ips = []
+
+[prometheus]
+# Docker network name that prometheus will join
+# external_network = ""
+# bind_address = ""
+
+[http_docker_network]
+# Docker network name that all services exposing HTTP services will join
+# They are: cometbft, ethapi, objects, faucet, and recall-s3
+# network_name = ""
+
+#  === For testing and localnet
+[localnet]
+enable = false
+
+# External docker network.
+# network = ""
+
+# Expose services required by recall CLI on the specified host
+# cli_bind_host = "127.0.0.1"

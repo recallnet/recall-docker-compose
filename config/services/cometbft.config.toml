@@ -9,10 +9,10 @@
 
 # TCP or UNIX socket address of the ABCI application,
 # or the name of an ABCI application compiled in with the CometBFT binary
-proxy_app = "tcp://${project_name}-fendermint-1:26658"
+proxy_app = "dynamically-configured"
 
 # A custom human readable name for this node
-moniker = "$node_name"
+moniker = "dynamically-configured"
 
 # If this node is many blocks behind the tip of the chain, BlockSync
 # allows them to catchup quickly by downloading blocks in parallel
@@ -211,13 +211,13 @@ laddr = "tcp://0.0.0.0:26656"
 # Address to advertise to peers for them to dial. If empty, will use the same
 # port as the laddr, and will introspect on the listener to figure out the
 # address. IP and port are required. Example: 159.89.10.97:26656
-external_address = "$cometbft_external_address"
+external_address = "dynamically-configured"
 
 # Comma separated list of seed nodes to connect to
 seeds = ""
 
 # Comma separated list of nodes to keep persistent connections to
-persistent_peers = "$cometbft_persistent_peers"
+persistent_peers = "dynamically-configured"
 
 # Path to address book
 addr_book_file = "config/addrbook.json"
@@ -359,7 +359,7 @@ experimental_max_gossip_connections_to_non_persistent_peers = 0
 # the network to take and serve state machine snapshots. State sync is not attempted if the node
 # has any local state (LastBlockHeight > 0). The node will have a truncated block history,
 # starting from the height of the snapshot.
-enable = $cometbft_statesync_enable
+enable = false
 
 # RPC servers (comma-separated) for light client verification of the synced state machine and
 # retrieval of state data for node bootstrapping. Also needs a trusted height and corresponding
@@ -367,13 +367,13 @@ enable = $cometbft_statesync_enable
 #
 # For Cosmos SDK-based chains, trust_period should usually be about 2/3 of the unbonding time (~2
 # weeks) during which they can be financially punished (slashed) for misbehavior.
-rpc_servers = "$cometbft_rpc_servers,$cometbft_rpc_servers"
+rpc_servers = "dynamically-configured"
 
 # The height may not be higher than the latest snapshat height: https://github.com/cosmos/cosmos-sdk/issues/20990
-trust_height = $trusted_block_height
+trust_height = 0
 # Pick a block height and get it from a root validator
 # curl -s https://api.node-0.testnet.recall.network/block?height=2500000 | jq -r '.result.block_id.hash'
-trust_hash = "$trusted_block_hash"
+trust_hash = "dynamically-configured"
 trust_period = "168h0m0s"
 
 # Time to spend discovering snapshots before initiating a restore.

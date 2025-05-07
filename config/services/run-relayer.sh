@@ -8,5 +8,5 @@ ipc-cli checkpoint relayer \
   --subnet $subnet_id \
   --submitter $relayer_address \
   --checkpoint-interval-sec $relayer_checkpoint_interval_sec \
-  --max-parallelism $relayer_max_parallelism \
+  --max-parallelism 1 \
   --metrics-address 0.0.0.0:9184

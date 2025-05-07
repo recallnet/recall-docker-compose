@@ -1,5 +1,0 @@
-services:
-  registrar:
-    networks:
-      - default
-      - external-http

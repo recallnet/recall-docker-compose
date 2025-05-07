@@ -1,21 +1,25 @@
 # === This a template for your custom node configuration.
-# Copy it to node.env and edit.
+# Copy it to node.toml and edit.
 
 # Node name on the network in the prometheus metrics
-node_name=node-N
+node_name = "node-N"
 
 # All docker containers will have this prefix
-project_name=recall-testnet-node-0
+project_name = "recall-testnet-node-0"
 
-parent_endpoint="https://calibration.node.glif.io/archive/lotus/rpc/v1"
-parent_endpoint_token=
+node_private_key = "setme"
 
-node_private_key=setme
+[parent_endpoint]
+# This endpoint should provide full history.
+url = "https://calibration.node.glif.io/archive/lotus/rpc/v1"
+# token=
 
+
+[networking]
 # IP address to bind the ports of the services to.
 # Set to your host IP or 0.0.0.0
-host_bind_ip="127.0.0.1"
+host_bind_ip = "127.0.0.1"
 
 # IP address to advertise to peers for them to dial.
 # You might want to change it if the node is running behind a proxy or NAT.
-advertised_external_ip=$host_bind_ip
+# advertised_external_ip = ""
