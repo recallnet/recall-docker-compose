@@ -564,7 +564,8 @@ export def write-node-tools [] {
   [
     "#!/usr/bin/env bash"
     "set -e"
-    $"docker run --name node-tools --rm -it -v ($env.USER_SPACE_WORKDIR):/workdir --network ($c.project_name) ($env.TOOLS_IMAGE) /workdir/scripts/node-tools $@"
+    '[ -t 0 ] && tty_flag="-it" || tty_flag=""'
+    $"docker run --name node-tools --rm $tty_flag -v ($env.USER_SPACE_WORKDIR):/workdir --network ($c.project_name) ($env.TOOLS_IMAGE) /workdir/scripts/node-tools $@"
     ""
   ] | str join "\n" | save -f $tools_file
   chmod +x $tools_file
