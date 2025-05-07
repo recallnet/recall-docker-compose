@@ -526,16 +526,18 @@ export def configure-localnet [] {
     }
   }]} | into record)
 
-  let cli_host = ($env.LOCALNET_CLI_BIND_HOST? | default $c.localnet.cli_bind_host?)
-  let cli_binds = (if ($cli_host | is-empty) {{}} else {
-    cometbft: {
-      ports: [ $"($cli_host):26657:26657" ]
-    }
-    ethapi: {
-      ports: [ $"($cli_host):8645:8545" ]
-    }
-    objects: {
-      ports: [ $"($cli_host):8001:8001" ]
+  let cli_binds = (if ($c.localnet.cli_bind_host? | is-empty) {{}} else {
+    let cli_host = $"${LOCALNET_CLI_BIND_HOST:-($c.localnet.cli_bind_host)}"
+    {
+      cometbft: {
+        ports: [ $"($cli_host):26657:26657" ]
+      }
+      ethapi: {
+        ports: [ $"($cli_host):8645:8545" ]
+      }
+      objects: {
+        ports: [ $"($cli_host):8001:8001" ]
+      }
     }
   })
 
