@@ -2,4 +2,5 @@
 
 set -e
 
-docker run --rm -it ghcr.io/foundry-rs/foundry:stable "cast wallet new"
+[ -t 0 ] && tty_flag="-it" || tty_flag=""
+docker run --rm $tty_flag ghcr.io/foundry-rs/foundry:stable "cast wallet new"
