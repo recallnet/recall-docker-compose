@@ -24,6 +24,6 @@ def main [
   [
     "set -eu"
     $"docker build -q -t ($tools_image) ($build_args) -f ($scripts_dir)/tools.Dockerfile ($scripts_dir) > /dev/null"
-    $"docker run --rm -it ($run_args) ($tools_image) /repo/scripts/init.nu"
+    $"docker run --rm $tty_flag ($run_args) ($tools_image) /repo/scripts/init.nu"
   ] | str join "; "
 }
