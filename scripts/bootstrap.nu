@@ -10,7 +10,9 @@ def main [
   let c = (util read-config)
 
   let scripts_dir = ($repo_dir | path join "scripts")
-  let tools_image = $"recall-tools:($c.images.fendermint | split row ':' | get 1)"
+  let tools_image = if ($c.images.fendermint | str contains ":") {
+    $"recall-tools:($c.images.fendermint | split row ':' | get 1)"
+  } else "recall-tools"
 
   let build_args = $"--build-arg fendermint_image=($c.images.fendermint) --build-arg cometbft_image=($c.images.cometbft)"
   let run_args = [
