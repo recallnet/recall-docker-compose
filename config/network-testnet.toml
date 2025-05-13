@@ -1,37 +1,21 @@
 address_network = "testnet"
 
 [parent_chain]
-chain_id = "314159"
+chain_id = 314159
 
 [parent_chain.addresses]
-gateway = "0x2758f99EaB8ea9B8678B5d841851D62Ef18AAB26"
-registry = "0xE8090d55E7ecc0565830845Df67bfD3fA81D4158"
-supply_source = "0xd1239c6b6f806EC3752df12CEaddD88187BCf1E5"
-subnet_contract = "0x6cc04b6c7321759795d7d1d67c70468aa439f729"
-validator_gater = "0xc659c7c7a890af5a7e24f74fff0836e3273107d7"
-validator_rewarder = "0x11A99eb5753718057C9D51A11a27499c2D2042F9"
+gateway = "0x23D68cF030790aDBfC4DcBAb51Cc5941cd744CCa"
+registry = "0xcBbd550971d46de7271BBF746D62F53987ad7A87"
+supply_source = "0x085Ae18100b79fc8edc48e0FcF94070f48659874"
+subnet_contract = "0x56f154bffe4e291fcc6c7162e8dd77e60b48c70f"
+validator_gater = "0xe00cd39d382622938459c347bf37e9fad3320e8d"
+validator_rewarder = "0xf35d2Be49B4cB9A7bA9596D6FC5cD7841Df238aD"
 
 [subnet]
-subnet_id = "/r314159/t410fntaew3dtef2zpfox2hlhy4cgrksdt5zjwg3hbfi"
+subnet_id = "/r314159/t410fk3yvjp76jyur7tdmofrorxlx4yfurryp63hph6a"
 chain_id = 2481632
 
-[subnet.addresses]
-credit_manager = "0x296042865b783D8E8Fb09F04FFAE2A66a16B85Bc"
-bucket_manager = "0x170a22c76a2Bb7c5F1b0e7067a0ddb7C3452c8e0"
-faucet_contract = "0x19e99fB563CD187fC9e2D0dd204D2c0aD3a87Adc"
-blob_manager = "0x27594F8412bA08278b15b55C6347605Ee3b2020C"
-
 [endpoints]
-cometbft_rpc_servers = [
-  "https://api.v016.node-0.testnet.recall.network:443",
-  "https://api.v016.node-1.testnet.recall.network:443",
-]
-cometbft_persistent_peers = [
-    "a137f88f9f4292181e657e49529825b215c59f91@api.v016.node-0.testnet.recall.network:25300",
-    "7652105b6b1e7485aabdde7c26c708af2326bf2a@api.v016.node-1.testnet.recall.network:25300",
-]
-fendermint_seeds = [
-    "/dns/api.v016.node-0.testnet.recall.network/tcp/25301/p2p/16Uiu2HAm7UAM9hotLQ5kizVuUJrE2h3vYnyWqB4BJNKzGbZ3TPdc",
-    "/dns/api.v016.node-1.testnet.recall.network/tcp/25301/p2p/16Uiu2HAmHhQ6SsEf9Li3tgKm295Ra5hUXHB17Mc4XKhpkkUQKZLw",
-]
-evm_rpc_url = "https://evm.v016.node-0.testnet.recall.network"
+cometbft_rpc_servers = ["https://api.v017.node-0.testnet.recall.network:443"]
+cometbft_persistent_peers = []
+fendermint_seeds = []
