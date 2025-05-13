@@ -15,7 +15,18 @@ validator_rewarder = "0xf35d2Be49B4cB9A7bA9596D6FC5cD7841Df238aD"
 subnet_id = "/r314159/t410fk3yvjp76jyur7tdmofrorxlx4yfurryp63hph6a"
 chain_id = 2481632
 
+[subnet.addresses]
+credit_manager = "0x70848a9c364f0d002D718454266cf2dC8A692FBC"
+bucket_manager = "0x754F3a52b2366F7fE421a7C711D97e060bf64B4c"
+faucet_contract = "0x06f05D64aA30F1db2710331E9631a48d92722877"
+blob_manager = "0xe3B256E6557Ac9cDA74AEF968a70504b843B8c96"
+
 [endpoints]
 cometbft_rpc_servers = ["https://api.v017.node-0.testnet.recall.network:443"]
-cometbft_persistent_peers = []
-fendermint_seeds = []
+cometbft_persistent_peers = [
+  "bf82a020e708e6dddb96c86bca3ee67981d6bb60@api.v017.node-0.testnet.recall.network:23200",
+]
+fendermint_seeds = [
+  "/dns/api.v017.node-0.testnet.recall.network/tcp/23201/p2p/16Uiu2HAmTmfwnaSLXYYsZUUaaPNG5kZ3WFSabJ8GaxHCxFYcxxYk",
+]
+evm_rpc_url = "https://evm.v017.node-0.testnet.recall.network"
