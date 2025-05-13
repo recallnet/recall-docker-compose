@@ -22,11 +22,16 @@ faucet_contract = "0x06f05D64aA30F1db2710331E9631a48d92722877"
 blob_manager = "0xe3B256E6557Ac9cDA74AEF968a70504b843B8c96"
 
 [endpoints]
-cometbft_rpc_servers = ["https://api.v017.node-0.testnet.recall.network:443"]
+cometbft_rpc_servers = [
+  "https://api.v017.node-0.testnet.recall.network:443",
+  "https://api.v017.node-1.testnet.recall.network:443",
+]
 cometbft_persistent_peers = [
   "bf82a020e708e6dddb96c86bca3ee67981d6bb60@api.v017.node-0.testnet.recall.network:23200",
+  "932b101a4bb7eca4d289afc2e275db7d7ccb2ccf@api.v017.node-1.testnet.recall.network:23200",
 ]
 fendermint_seeds = [
   "/dns/api.v017.node-0.testnet.recall.network/tcp/23201/p2p/16Uiu2HAmTmfwnaSLXYYsZUUaaPNG5kZ3WFSabJ8GaxHCxFYcxxYk",
+  "/dns/api.v017.node-1.testnet.recall.network/tcp/23201/p2p/16Uiu2HAkuoZMTfPNVFoiiMvTs2rB5wBDnSToQjUhqK9PoWJ3wWBZ",
 ]
 evm_rpc_url = "https://evm.v017.node-0.testnet.recall.network"
