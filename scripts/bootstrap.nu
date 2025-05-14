@@ -27,6 +27,6 @@ def main [
     set -eu
     docker build -q -t ($tools_image) ($build_args) -f ($scripts_dir)/tools.Dockerfile ($scripts_dir) > /dev/null
     docker run --rm $tty_flag ($run_args) ($tools_image) /repo/scripts/init.nu
-    rm ($workdir)/init.sh
+    rm -f ($workdir)/init.sh
   " | save -f "/workdir/init.sh"
 }
