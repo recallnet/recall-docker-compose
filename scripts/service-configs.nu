@@ -9,6 +9,7 @@ def write-docker-service [name: string, service_config: record] {
 
   let srv = ($service_config | merge {
     restart: "always"
+    user: $"(id -u):(id -g)"
     networks: {
       default: {
         ipv4_address: (service-ip $name)
@@ -294,7 +295,6 @@ export def configure-prometheus [] {
   mkdir $prom_targets_dir
   mkdir "/workdir/prometheus/etc/rules"
   mkdir "/workdir/prometheus/data"
-  chown nobody /workdir/prometheus/data
 
   let c = $env.node_config
   {

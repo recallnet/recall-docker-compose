@@ -21,6 +21,7 @@ def main [
     -e $"TOOLS_IMAGE=($tools_image)"
     -e $"USER_SPACE_WORKDIR=($workdir)"
     ...(if $c.localnet.enable { [--network $c.localnet.network] } else [])
+    -u "$(id -u):$(id -g)"
   ] | str join " "
 
   $"
@@ -28,5 +29,16 @@ def main [
     docker build -q -t ($tools_image) ($build_args) -f ($scripts_dir)/tools.Dockerfile ($scripts_dir) > /dev/null
     docker run --rm $tty_flag ($run_args) ($tools_image) /repo/scripts/init.nu
     rm -f ($workdir)/init.sh
+
+    function mkDataDir {
+      \(
+        cd ($workdir)
+        mkdir -p ($c.datadir)/$1
+        chown (id -u):(id -g) ($c.datadir)/$1
+      )
+    }
+
+    mkDataDir iroh-fendermint
+    mkDataDir iroh-objects
   " | save -f "/workdir/init.sh"
 }
