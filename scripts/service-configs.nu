@@ -295,7 +295,6 @@ export def configure-prometheus [] {
   mkdir $prom_targets_dir
   mkdir "/workdir/prometheus/etc/rules"
   mkdir "/workdir/prometheus/data"
-  chown nobody /workdir/prometheus/data
 
   let c = $env.node_config
   {
