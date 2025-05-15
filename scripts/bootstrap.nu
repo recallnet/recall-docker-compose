@@ -21,7 +21,7 @@ def main [
     -e $"TOOLS_IMAGE=($tools_image)"
     -e $"USER_SPACE_WORKDIR=($workdir)"
     ...(if $c.localnet.enable { [--network $c.localnet.network] } else [])
-    -u "$(id -u)"
+    -u "$(id -u):$(id -g)"
   ] | str join " "
 
   $"

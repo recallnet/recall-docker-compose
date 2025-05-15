@@ -14,7 +14,7 @@ docker build -q -t recall-nushell -f $repo_dir/scripts/nushell.Dockerfile $repo_
 
 [ -t 0 ] && tty_flag="-it" || tty_flag=""
 
-docker run --rm $tty_flag -u $(id -u) -v $repo_dir:/repo -v $workdir:/workdir recall-nushell /repo/scripts/bootstrap.nu $repo_dir $workdir
+docker run --rm $tty_flag -u $(id -u):$(id -g) -v $repo_dir:/repo -v $workdir:/workdir recall-nushell /repo/scripts/bootstrap.nu $repo_dir $workdir
 
 # bootstrap.nu creates init.sh in workdir
 export tty_flag
