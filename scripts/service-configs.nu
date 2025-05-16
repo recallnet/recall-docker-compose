@@ -9,7 +9,7 @@ def write-docker-service [name: string, service_config: record] {
 
   let srv = ($service_config | merge {
     restart: "always"
-    user: $"(id -u):(id -g)"
+    user: $"${RECALL_NODE_USER:-(id -u):(id -g)}"
     networks: {
       default: {
         ipv4_address: (service-ip $name)
