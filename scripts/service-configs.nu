@@ -434,15 +434,20 @@ export def configure-registrar [] {
 
 export def configure-recall-s3 [] {
   let c = $env.node_config
+  mkdir /workdir/recall-s3
   write-docker-service "recall-s3" {
     image: $c.images.recall_s3
     depends_on: [
       "cometbft"
       "objects"
     ]
+    volumes: [
+      "./recall-s3:/recall-s3"
+    ]
     environment: {
       HOST: 0.0.0.0
       PORT: "8014"
+      HOME: "/recall-s3"
       ACCESS_KEY: $c.recall_s3.access_key
       SECRET_KEY: $c.recall_s3.secret_key
       DOMAIN_NAME: $c.recall_s3.domain
