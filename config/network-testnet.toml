@@ -22,8 +22,10 @@ faucet_contract = "0x62a244b78691b30f08ebd87623A82eF29b9151d1"
 cometbft_rpc_servers = ["https://api.v018.node-0.testnet.recall.network:443"]
 cometbft_persistent_peers = [
   "70006c20f1242b67609b382cfe4bd5e31b0f07e7@api.v018.node-0.testnet.recall.network:23000",
+  "e5f42bfd57bd8b22c8f3af061986745283904df0@api.v018.node-1.testnet.recall.network:23000",
 ]
 fendermint_seeds = [
   "/dns/api.v018.node-0.testnet.recall.network/tcp/23001/p2p/16Uiu2HAmQgx6t57LqWjNvQwBEYHsPfJp1Pdr83ZoJUXUoGSc94jt",
+  "/dns/api.v018.node-1.testnet.recall.network/tcp/23001/p2p/16Uiu2HAkvQf2Dg6ftM7yNAYp1boG98fFXvtEgvqhhuzCR99uVSuL",
 ]
 evm_rpc_url = "https://evm.v018.node-0.testnet.recall.network"
