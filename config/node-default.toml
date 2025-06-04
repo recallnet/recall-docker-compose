@@ -16,7 +16,7 @@ cometbft = "cometbft/cometbft:v0.37.x"
 recall_exporter = "textilemachine/recall-exporter:sha-c6d1903"
 prometheus = "prom/prometheus:v2.54.1"
 registrar = "textilemachine/registrar:729f7f8"
-recall_s3 = "textilemachine/recall-s3:sha-da59919"
+recall_s3 = "textilemachine/recall-s3:sha-d4e3da3"
 
 [networking]
 # The IP range should be at least /24.
