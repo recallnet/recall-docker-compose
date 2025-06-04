@@ -4,34 +4,28 @@ address_network = "testnet"
 chain_id = 314159
 
 [parent_chain.addresses]
-gateway = "0x23D68cF030790aDBfC4DcBAb51Cc5941cd744CCa"
-registry = "0xcBbd550971d46de7271BBF746D62F53987ad7A87"
-supply_source = "0x085Ae18100b79fc8edc48e0FcF94070f48659874"
-subnet_contract = "0x56f154bffe4e291fcc6c7162e8dd77e60b48c70f"
-validator_gater = "0xe00cd39d382622938459c347bf37e9fad3320e8d"
-validator_rewarder = "0xf35d2Be49B4cB9A7bA9596D6FC5cD7841Df238aD"
+gateway = "0x7491B0e2C4aB0Fbee96151eE9B79d623C2176D70"
+registry = "0x43808E00B1543ee71E8557fa0183aB5F4C0Dd62B"
+supply_source = "0x0a698761AAbc10B401B0702dedf04DAB3bCA6E60"
+subnet_contract = "0xa1fd559c014e851f861c9f13b145aa3bfe67b037"
+validator_gater = "0xd0ded491cb17b89481a51930c6d2f4e6edf80afa"
+validator_rewarder = "0x5d8709Cc7f55ef2290316D31e5b6b9350e0Ab0AA"
 
 [subnet]
-subnet_id = "/r314159/t410fk3yvjp76jyur7tdmofrorxlx4yfurryp63hph6a"
+subnet_id = "/r314159/t410fuh6vlhabj2cr7bq4t4j3crnkhp7gpmbxs444plq"
 chain_id = 2481632
 
 [subnet.addresses]
-credit_manager = "0x70848a9c364f0d002D718454266cf2dC8A692FBC"
-bucket_manager = "0x754F3a52b2366F7fE421a7C711D97e060bf64B4c"
-faucet_contract = "0x06f05D64aA30F1db2710331E9631a48d92722877"
-blob_manager = "0xe3B256E6557Ac9cDA74AEF968a70504b843B8c96"
+faucet_contract = "0x62a244b78691b30f08ebd87623A82eF29b9151d1"
 
 [endpoints]
-cometbft_rpc_servers = [
-  "https://api.v017.node-0.testnet.recall.network:443",
-  "https://api.v017.node-1.testnet.recall.network:443",
-]
+cometbft_rpc_servers = ["https://api.v018.node-0.testnet.recall.network:443"]
 cometbft_persistent_peers = [
-  "bf82a020e708e6dddb96c86bca3ee67981d6bb60@api.v017.node-0.testnet.recall.network:23200",
-  "932b101a4bb7eca4d289afc2e275db7d7ccb2ccf@api.v017.node-1.testnet.recall.network:23200",
+  "70006c20f1242b67609b382cfe4bd5e31b0f07e7@api.v018.node-0.testnet.recall.network:23000",
+  "e5f42bfd57bd8b22c8f3af061986745283904df0@api.v018.node-1.testnet.recall.network:23000",
 ]
 fendermint_seeds = [
-  "/dns/api.v017.node-0.testnet.recall.network/tcp/23201/p2p/16Uiu2HAmTmfwnaSLXYYsZUUaaPNG5kZ3WFSabJ8GaxHCxFYcxxYk",
-  "/dns/api.v017.node-1.testnet.recall.network/tcp/23201/p2p/16Uiu2HAkuoZMTfPNVFoiiMvTs2rB5wBDnSToQjUhqK9PoWJ3wWBZ",
+  "/dns/api.v018.node-0.testnet.recall.network/tcp/23001/p2p/16Uiu2HAmQgx6t57LqWjNvQwBEYHsPfJp1Pdr83ZoJUXUoGSc94jt",
+  "/dns/api.v018.node-1.testnet.recall.network/tcp/23001/p2p/16Uiu2HAkvQf2Dg6ftM7yNAYp1boG98fFXvtEgvqhhuzCR99uVSuL",
 ]
-evm_rpc_url = "https://evm.v017.node-0.testnet.recall.network"
+evm_rpc_url = "https://evm.v018.node-0.testnet.recall.network"
