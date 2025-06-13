@@ -218,6 +218,7 @@ export def configure-fendermint [] {
       FM_NETWORK: $c.network.address_network
       IROH_RPC_ADDR: "0.0.0.0:4919"
       IROH_PATH: "/iroh-data"
+      FM_TRACING__CONSOLE__LEVEL: "info,fendermint=debug,recall_kernel=debug,recall_executor=debug,recall_syscalls=debug,iroh_manager=debug"
     }
   }
 }
