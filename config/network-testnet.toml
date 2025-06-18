@@ -15,10 +15,18 @@ validator_rewarder = "0xf3eEC3Af92C75c8504006C8feBC6E47a266Ed7bd"
 subnet_id = "/r314159/t410f5ooowgqbpfv747piopbp2mus5xfw7kmgpm7da2y"
 chain_id = 2481632
 
+[subnet.addresses]
+faucet_contract = "0xbF9DC8B67ECDcb17d10276efAc8D585efB66e0e7"
+
 [endpoints]
 cometbft_rpc_servers = [
     "https://api.v0110.node-0.testnet.recall.network:443",
     "https://api.v0110.node-0.testnet.recall.network:443",
 ]
-cometbft_persistent_peers = []
-fendermint_seeds = []
+cometbft_persistent_peers = [
+    "3ba8fd592f8dac77b6a7f867b2fe779b790a27fa@api.v0110.node-0.testnet.recall.network:23000"
+]
+fendermint_seeds = [
+    "/dns/api.v0110.node-0.testnet.recall.network/tcp/23001/p2p/16Uiu2HAkxuXa7P2fkgch4pDBsMeCaW2Ezv2PdQYjeq67T4LjjBv3"
+]
+evm_rpc_url = "https://evm.v0110.node-0.testnet.recall.network"
