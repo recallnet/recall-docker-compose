@@ -19,27 +19,27 @@ tendermint_rpc_url = "dynamically-configured"
 # with planning for an upcoming coordinated upgrade. Set to 0 to never halt.
 halt_height = 0
 
-# Number of pending blobs to process in parallel
-blob_concurrency = 1024
+# Number of pending blobs to process in parallel.
+blob_concurrency = 500
 
-# Number of pending read requests to process in parallel
+# Number of pending read requests to process in parallel.
 read_request_concurrency = 10
 
-# Interval in blocks at which to emit blob metrics
+# Interval in blocks at which to emit blob metrics.
 blob_metrics_interval = 10
 
 # Gas limit used by the system actor to manage blob queues.
-blob_queue_gas_limit = 500000000
+blob_queue_gas_limit = 1000000000
 
 # Secp256k1 private key used for signing transactions. Leave empty if not validating,
 # or if it's not needed to sign and broadcast transactions as a validator.
 # Leaving empty by default so single node deployments don't fail to start because
 # this key is not copied into place.
 [validator_key]
-# # Path to the secret key file in base64 format.
+# Path to the secret key file in base64 format.
 path = "/data/keys/validator.sk"
 
-# # The on-chain account kind (regular|ethereum)
+# The on-chain account kind (regular|ethereum)
 kind = "ethereum"
 
 [abci]
@@ -123,7 +123,7 @@ gas_search_step = 1.25
 #
 # Enabling this option is required to fully support "pending" queries in the Ethereum API,
 # otherwise only the nonces and balances are projected into a partial state.
-exec_in_check = false
+exec_in_check = true
 
 # Gas fee used when broadcasting transactions.
 # TODO: Configure a value once validators are charged for the "miner penalty".
