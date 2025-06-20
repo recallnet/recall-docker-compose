@@ -11,7 +11,7 @@ project_name = "testnet-node-0"
 datadir = "./data"
 
 [images]
-fendermint = "textile/fendermint:sha-6af65f0"
+fendermint = "textile/fendermint:sha-567108a"
 cometbft = "cometbft/cometbft:v0.37.x"
 recall_exporter = "textilemachine/recall-exporter:sha-c6d1903"
 prometheus = "prom/prometheus:v2.54.1"
