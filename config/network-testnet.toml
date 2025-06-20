@@ -21,7 +21,7 @@ faucet_contract = "0xbF9DC8B67ECDcb17d10276efAc8D585efB66e0e7"
 [endpoints]
 cometbft_rpc_servers = [
     "https://api.v0110.node-0.testnet.recall.network:443",
-    "https://api.v0110.node-0.testnet.recall.network:443",
+    "https://api.v0110.node-1.testnet.recall.network:443"
 ]
 cometbft_persistent_peers = [
     "3ba8fd592f8dac77b6a7f867b2fe779b790a27fa@api.v0110.node-0.testnet.recall.network:23000",
