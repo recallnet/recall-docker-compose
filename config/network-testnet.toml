@@ -4,28 +4,31 @@ address_network = "testnet"
 chain_id = 314159
 
 [parent_chain.addresses]
-gateway = "0x63B59D98b99197863c9b0D8512C79AD667892ac5"
-registry = "0x3e56a8a30762db79b5ddB099a51fe9eEa0CBE8Be"
-supply_source = "0x791ecd69Ce942167bEeEF4E2352B27727d9ad73f"
-subnet_contract = "0xb7c29cf716eb8b6dcfffedf0cdf1c6a049c5018c"
-validator_gater = "0x3b1b3894621d98c0efb1ffc2edc2724484f051e0"
-validator_rewarder = "0x535A5ccD485E14CB9386f9192e709446985ae844"
+gateway = "0x1e4c292a339B037ce9b5eCA4d69dBb8dC87390Ab"
+registry = "0x4d1EdDBb490f05e4B859Ee2288265Daa510FDeFd"
+supply_source = "0x3A4539d46C8998544E4D993D256C272F19E192bC"
+subnet_contract = "0xeb9ceb1a01796bfe7de873c2fd3292edcb6fa986"
+validator_gater = "0x87d5a7dd2ac885a31b2ae04b279d474ce6fd0f18"
+validator_rewarder = "0xf3eEC3Af92C75c8504006C8feBC6E47a266Ed7bd"
 
 [subnet]
-subnet_id = "/r314159/t410fw7bjz5yw5ofw3t775xym34ogube4kammzma6mgq"
+subnet_id = "/r314159/t410f5ooowgqbpfv747piopbp2mus5xfw7kmgpm7da2y"
 chain_id = 2481632
 
 [subnet.addresses]
-faucet_contract = "0x948564d668A77060A6B0F40b362959b7C8F35bAE"
+faucet_contract = "0xbF9DC8B67ECDcb17d10276efAc8D585efB66e0e7"
 
 [endpoints]
-cometbft_rpc_servers = ["https://api.v019.node-0.testnet.recall.network:443"]
+cometbft_rpc_servers = [
+    "https://api.v0110.node-0.testnet.recall.network:443",
+    "https://api.v0110.node-1.testnet.recall.network:443"
+]
 cometbft_persistent_peers = [
-  "af48aeb09606367b88dadee775f2706183f0c6e6@api.v019.node-0.testnet.recall.network:23200",
-  "7c43464da5b14281b3409c28ddac03c834729f21@api.v019.node-1.testnet.recall.network:23200",
+    "3ba8fd592f8dac77b6a7f867b2fe779b790a27fa@api.v0110.node-0.testnet.recall.network:23000",
+    "df1144e39f4b74324bfd81ce493c393e07f46d72@api.v0110.node-1.testnet.recall.network:23000"
 ]
 fendermint_seeds = [
- "/dns/api.v019.node-0.testnet.recall.network/tcp/23201/p2p/16Uiu2HAkyWCzQj9z8X8jA6Mu2qwCYZquHgGm6bhYSEu5HAdpW5n9", 
- "/dns/api.v019.node-1.testnet.recall.network/tcp/23201/p2p/16Uiu2HAmAA5y6L6VMsvDkS2o51zbsw3a3zZfWCLqsMFVLPGYiCVw", 
+    "/dns/api.v0110.node-0.testnet.recall.network/tcp/23001/p2p/16Uiu2HAkxuXa7P2fkgch4pDBsMeCaW2Ezv2PdQYjeq67T4LjjBv3",
+    "/dns/api.v0110.node-1.testnet.recall.network/tcp/23001/p2p/16Uiu2HAmN68wua3mBNSZdYp3iqqHDwhUBRuTvdZXXL5aGCMRRNyZ"
 ]
-evm_rpc_url = "https://evm.v019.node-0.testnet.recall.network"
+evm_rpc_url = "https://evm.v0110.node-0.testnet.recall.network"
